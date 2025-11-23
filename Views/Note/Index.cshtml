@@ -1,0 +1,77 @@
+@model IEnumerable<CarCareTracker.Models.Note.Note>
+
+@{
+    ViewData["Title"] = "Notes";
+    var vehicle = ViewBag.Vehicle as CarCareTracker.Models.Vehicle.Vehicle;
+}
+
+<h1>Notes</h1>
+
+@if (vehicle != null)
+{
+    <p>
+        <strong>Vehicle:</strong>
+        @vehicle.Year @vehicle.Make @vehicle.Model (@vehicle.LicensePlate)
+    </p>
+}
+
+<p>
+    <a asp-action="Create"
+       asp-route-vehicleId="@(vehicle?.Id ?? 0)"
+       class="btn btn-primary">
+        Add Note
+    </a>
+    <a asp-controller="Vehicle"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Back to Garage
+    </a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-muted">
+        No notes have been added for this vehicle yet. Use <strong>Add Note</strong> to jot down any important details.
+    </p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Created</th>
+                <th>Title</th>
+                <th>Body</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var n in Model)
+        {
+            <tr>
+                <td>@n.CreatedAt.ToLocalTime()</td>
+                <td>@n.Title</td>
+                <td>@n.Body</td>
+                <td class="text-end">
+                    <a asp-action="Edit"
+                       asp-route-id="@n.Id"
+                       class="btn btn-sm btn-outline-secondary">
+                        Edit
+                    </a>
+                    <form asp-action="Delete"
+                          asp-route-id="@n.Id"
+                          method="post"
+                          class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Delete this note?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

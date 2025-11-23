@@ -1,0 +1,77 @@
+@model CarCareTracker.Models.Reminder.ReminderRecord
+
+@{
+    ViewData["Title"] = "Edit Reminder";
+    var vehicle = ViewBag.Vehicle as CarCareTracker.Models.Vehicle.Vehicle;
+}
+
+<h1>Edit Reminder</h1>
+
+@if (vehicle != null)
+{
+    <p>
+        <strong>Vehicle:</strong>
+        @vehicle.Year @vehicle.Make @vehicle.Model (@vehicle.LicensePlate)
+    </p>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="VehicleId" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Metric" class="form-label"></label>
+                <select asp-for="Metric" class="form-select"
+                        asp-items="Html.GetEnumSelectList<CarCareTracker.Enum.ReminderMetric>()">
+                </select>
+                <span asp-validation-for="Metric" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DueDate" class="form-label"></label>
+                <input asp-for="DueDate" class="form-control" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DueOdometer" class="form-label"></label>
+                <input asp-for="DueOdometer" class="form-control" />
+                <span asp-validation-for="DueOdometer" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Tags" class="form-label"></label>
+                <input asp-for="Tags" class="form-control" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="IsCompleted" class="form-check-input" />
+                <label asp-for="IsCompleted" class="form-check-label"></label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index"
+               asp-route-vehicleId="@Model.VehicleId"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

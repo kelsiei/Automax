@@ -1,0 +1,92 @@
+@model CarCareTracker.Models.Settings.ServerSettingsViewModel
+
+@{
+    ViewData["Title"] = "Server Settings";
+}
+
+<h1>Server Settings</h1>
+
+@if (TempData["StatusMessage"] is string status && !string.IsNullOrWhiteSpace(status))
+{
+    <div class="alert alert-success" role="alert">
+        @status
+    </div>
+}
+
+<p class="text-muted">
+    These settings apply to the entire application and should typically only be changed by a root user.
+</p>
+
+<form asp-action="Index" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Motd" class="form-label"></label>
+        <textarea asp-for="Motd" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Motd" class="text-danger"></span>
+        <small class="form-text text-muted">
+            This message is shown on the home page as the Message of the Day.
+        </small>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="EnableAuth" class="form-check-input" />
+        <label asp-for="EnableAuth" class="form-check-label"></label>
+        <span asp-validation-for="EnableAuth" class="text-danger"></span>
+        <div class="form-text">
+            When enabled, most pages require a logged-in user. When disabled, the app may allow anonymous access.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LocaleOverride" class="form-label"></label>
+        <input asp-for="LocaleOverride" class="form-control" />
+        <span asp-validation-for="LocaleOverride" class="text-danger"></span>
+        <div class="form-text">
+            Enter a culture name like <code>en-CA</code> or <code>en-US</code>. Leave blank to use the default (<code>en-US</code>).
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LocaleDateTimeOverride" class="form-label"></label>
+        <input asp-for="LocaleDateTimeOverride" class="form-control" />
+        <span asp-validation-for="LocaleDateTimeOverride" class="text-danger"></span>
+        <div class="form-text">
+            Optional note about preferred date/time format (for documentation only).
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MaxDocumentUploadSizeMb" class="form-label"></label>
+        <input asp-for="MaxDocumentUploadSizeMb" class="form-control" />
+        <span asp-validation-for="MaxDocumentUploadSizeMb" class="text-danger"></span>
+        <div class="form-text">
+            Maximum size for uploaded documents (in megabytes). Leave blank to use the default (10 MB).
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="EnableReminderEmails" class="form-check-input" />
+        <label asp-for="EnableReminderEmails" class="form-check-label"></label>
+        <span asp-validation-for="EnableReminderEmails" class="text-danger"></span>
+        <div class="form-text">
+            When enabled, the system can send email digests of upcoming reminders to users with email addresses.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ReminderEmailDaysAhead" class="form-label"></label>
+        <input asp-for="ReminderEmailDaysAhead" class="form-control" />
+        <span asp-validation-for="ReminderEmailDaysAhead" class="text-danger"></span>
+        <div class="form-text">
+            Number of days ahead to include in reminder email digests. Leave blank to use the default (7 days).
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Settings</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

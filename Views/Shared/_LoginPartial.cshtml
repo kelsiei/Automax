@@ -1,0 +1,23 @@
+@using System.Security.Claims
+
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    var name = User.FindFirst(ClaimTypes.Name)?.Value ?? "User";
+
+    <li class="nav-item">
+        <span class="navbar-text me-2">
+            Hello, @name!
+        </span>
+    </li>
+    <li class="nav-item">
+        <form asp-controller="Login" asp-action="Logout" method="post" class="d-inline">
+            <button type="submit" class="btn btn-link nav-link p-0 align-baseline">Log out</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Login" asp-action="Index">Log in</a>
+    </li>
+}

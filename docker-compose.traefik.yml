@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  reverse-proxy:
+    image: traefik:v3.0
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      # TODO: configure TLS entrypoint and certificates
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: carcaretracker:traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.carcare.rule=Host(`carcare.local`)"
+      - "traefik.http.services.carcare.loadbalancer.server.port=8080"
+      # TODO: add TLS router rules and real domain configuration
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      POSTGRES_CONNECTION: ${POSTGRES_CONNECTION:-}
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env

@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] ??= "Error";
+    var statusCode = ViewBag.StatusCode as int? ?? 0;
+}
+
+<div class="text-center">
+    <h1 class="display-4">An unexpected error occurred.</h1>
+
+    @if (statusCode > 0)
+    {
+        <p class="lead">HTTP status code: @statusCode</p>
+    }
+
+    <p class="text-muted">
+        If this problem continues, please contact an administrator or your CarCareTracker root user.
+    </p>
+
+    <p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to Home</a>
+        <a asp-controller="Vehicle" asp-action="Index" class="btn btn-secondary ms-2">Go to Garage</a>
+    </p>
+</div>

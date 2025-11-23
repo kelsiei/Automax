@@ -1,0 +1,31 @@
+## Build artifacts
+bin/
+obj/
+out/
+publish/
+*.log
+
+## User-specific files
+*.user
+*.suo
+*.userprefs
+
+## IDE
+.vs/
+*.ide/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Node/npm
+node_modules/
+
+## Data and backups
+data/
+!data/.gitkeep
+# Note: data/config/ may be included or excluded based on deployment policy; adjust as needed.
+
+## Other
+*.tmp
+*.bak

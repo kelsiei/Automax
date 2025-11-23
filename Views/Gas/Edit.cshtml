@@ -1,0 +1,81 @@
+@model CarCareTracker.Models.GasRecord.GasRecord
+
+@{
+    ViewData["Title"] = "Edit Gas Entry";
+    var vehicle = ViewBag.Vehicle as CarCareTracker.Models.Vehicle.Vehicle;
+}
+
+<h1>Edit Gas Entry</h1>
+
+@if (vehicle != null)
+{
+    <p>
+        <strong>Vehicle:</strong>
+        @vehicle.Year @vehicle.Make @vehicle.Model (@vehicle.LicensePlate)
+    </p>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="VehicleId" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Date" class="form-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Odometer" class="form-label"></label>
+                <input asp-for="Odometer" class="form-control" />
+                <span asp-validation-for="Odometer" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Volume" class="form-label"></label>
+                <input asp-for="Volume" class="form-control" />
+                <span asp-validation-for="Volume" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PricePerUnit" class="form-label"></label>
+                <input asp-for="PricePerUnit" class="form-control" />
+                <span asp-validation-for="PricePerUnit" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TotalCost" class="form-label"></label>
+                <input asp-for="TotalCost" class="form-control" />
+                <span asp-validation-for="TotalCost" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="IsFullFillUp" class="form-check-input" />
+                <label asp-for="IsFullFillUp" class="form-check-label"></label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index"
+               asp-route-vehicleId="@Model.VehicleId"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

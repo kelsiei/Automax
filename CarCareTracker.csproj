@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CarCareTracker</RootNamespace>
+    <AssemblyName>CarCareTracker</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteDB" Version="5.0.17" />
+    <!-- TODO: Add Npgsql, MailKit, AutoMapper, and other dependencies in later phases -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="CarCareTracker.Tests\**\*.cs" />
+  </ItemGroup>
+</Project>

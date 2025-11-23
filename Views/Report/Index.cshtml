@@ -1,0 +1,171 @@
+@model CarCareTracker.Models.Report.ReportIndexViewModel
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<h1>Reports</h1>
+
+<p class="text-muted">
+    Overview of your vehicles, including mileage, maintenance, cost, plans, notes, and reminder status.
+    Use the Garage view for detailed per-vehicle editing.
+    </p>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-6">
+        <input type="text"
+               name="searchTerm"
+               value="@Model.SearchTerm"
+               class="form-control"
+               placeholder="Search by year, make, model, or plate..." />
+    </div>
+    <div class="col-md-3 d-flex align-items-center">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="showOnlyUrgent" value="true" @(Model.ShowOnlyUrgent ? "checked" : "") />
+            <input type="hidden" name="showOnlyUrgent" value="false" />
+            <label class="form-check-label">Urgent only</label>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex align-items-center">
+        <button type="submit" class="btn btn-outline-primary me-2">Apply</button>
+        @if (!string.IsNullOrWhiteSpace(Model.SearchTerm) || Model.ShowOnlyUrgent)
+        {
+            <span class="text-muted small">Showing filtered results</span>
+        }
+    </div>
+</form>
+
+@if (Model == null || !Model.VehicleSummaries.Any())
+{
+    <p class="text-muted">
+        No vehicles are available for reporting. Add a vehicle in the Garage first.
+    </p>
+}
+else
+{
+    <p>
+        <a asp-action="ExportCsv" class="btn btn-outline-secondary">
+            Download CSV
+        </a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>License Plate</th>
+                    <th class="text-end">Last Mileage</th>
+                    <th class="text-end">Last Service</th>
+                    <th class="text-end">Last Fill-Up</th>
+                    <th class="text-end">Total Cost</th>
+                    <th class="text-end">Cost / Mile</th>
+                    <th class="text-end">Active Plans</th>
+                    <th class="text-end">Notes</th>
+                    <th class="text-end">Documents</th>
+                    <th class="text-center">Urgent Reminders</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var v in Model.VehicleSummaries)
+            {
+                <tr>
+                    <td>@v.Year</td>
+                    <td>@v.Make</td>
+                    <td>@v.Model</td>
+                    <td>@v.LicensePlate</td>
+                    <td class="text-end">
+                        @(v.LastReportedMileage.HasValue ? v.LastReportedMileage.Value.ToString("N0") : "")
+                    </td>
+                    <td class="text-end">
+                        @(v.LastServiceDate.HasValue ? v.LastServiceDate.Value.ToShortDateString() : "")
+                    </td>
+                    <td class="text-end">
+                        @(v.LastGasDate.HasValue ? v.LastGasDate.Value.ToShortDateString() : "")
+                    </td>
+                    <td class="text-end">
+                        @(v.TotalCost.HasValue ? v.TotalCost.Value.ToString("C") : "")
+                    </td>
+                    <td class="text-end">
+                        @(v.CostPerMile.HasValue ? v.CostPerMile.Value.ToString("C") : "")
+                    </td>
+                    <td class="text-end">@v.ActivePlanCount</td>
+                    <td class="text-end">@v.NoteCount</td>
+                    <td class="text-end">@v.DocumentCount</td>
+                    <td class="text-center">
+                        @if (v.HasUrgentReminders)
+                        {
+                            <span class="badge bg-danger">Urgent</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">None</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    var summaries = Model.VehicleSummaries.ToList();
+    var vehicleCount = summaries.Count;
+    var vehiclesWithUrgent = summaries.Count(v => v.HasUrgentReminders);
+    var totalCost = summaries
+        .Where(v => v.TotalCost.HasValue)
+        .Sum(v => v.TotalCost!.Value);
+    var avgCostPerMile = summaries
+        .Where(v => v.CostPerMile.HasValue)
+        .Select(v => v.CostPerMile!.Value)
+        .DefaultIfEmpty(0m)
+        .Average();
+
+    <h2>Summary</h2>
+
+    <table class="table table-bordered w-auto table-summary">
+        <tbody>
+            <tr>
+                <th scope="row">Total vehicles</th>
+                <td class="text-end">@vehicleCount</td>
+            </tr>
+            <tr>
+                <th scope="row">Vehicles with urgent reminders</th>
+                <td class="text-end">@vehiclesWithUrgent</td>
+            </tr>
+            <tr>
+                <th scope="row">Total cost (all vehicles)</th>
+                <td class="text-end">@totalCost.ToString("C")</td>
+            </tr>
+            <tr>
+                <th scope="row">Average cost per mile</th>
+                <td class="text-end">@avgCostPerMile.ToString("C")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Reports pagination">
+        <ul class="pagination">
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage - 1)"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-showOnlyUrgent="@Model.ShowOnlyUrgent">Previous</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Page @Model.CurrentPage of @Model.TotalPages
+                </span>
+            </li>
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage + 1)"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-showOnlyUrgent="@Model.ShowOnlyUrgent">Next</a>
+            </li>
+        </ul>
+    </nav>
+}

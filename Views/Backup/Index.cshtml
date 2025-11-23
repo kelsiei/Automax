@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Backup";
+}
+
+<h1>Backup</h1>
+
+<p class="text-muted">
+    Download a backup of the application data directory (LiteDB database, configuration, and documents).
+</p>
+
+<p class="alert alert-warning">
+    This backup is intended for administrators only. Keep the downloaded file in a secure location.
+</p>
+
+<p>
+    <a asp-action="Download" class="btn btn-primary">
+        Download Backup (ZIP)
+    </a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary ms-2">
+        Back to Home
+    </a>
+</p>
+

@@ -1,0 +1,69 @@
+@model IEnumerable<CarCareTracker.Models.User.UserData>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h1>User Management</h1>
+
+@if (TempData["StatusMessage"] is string status && !string.IsNullOrWhiteSpace(status))
+{
+    <div class="alert alert-success" role="alert">
+        @status
+    </div>
+}
+
+<p class="text-muted">
+    Manage application users. Only the root user can access this page.
+</p>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create User</a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-muted">No users found.</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Root</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.UserName</td>
+                <td>@u.EmailAddress</td>
+                <td>@(u.IsAdmin ? "Yes" : "No")</td>
+                <td>@(u.IsRootUser ? "Yes" : "No")</td>
+                <td>@u.CreatedAt.ToLocalTime().ToString("g")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+
+                    @if (!u.IsRootUser)
+                    {
+                        <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Are you sure you want to delete this user?');">
+                                Delete
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+

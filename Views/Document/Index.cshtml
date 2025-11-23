@@ -1,0 +1,88 @@
+@model IEnumerable<string>
+
+@{
+    ViewData["Title"] = "Documents";
+
+    var vehicle = ViewBag.Vehicle as CarCareTracker.Models.Vehicle.Vehicle;
+}
+
+<h1>Documents</h1>
+
+@if (vehicle != null)
+{
+    <p>
+        <strong>Vehicle:</strong>
+        @vehicle.Year @vehicle.Make @vehicle.Model (@vehicle.LicensePlate)
+    </p>
+}
+
+@if (TempData["DocumentStatus"] is string status && !string.IsNullOrWhiteSpace(status))
+{
+    <div class="alert alert-info" role="alert">
+        @status
+    </div>
+}
+
+<div class="mb-3">
+    <form asp-action="Upload" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="vehicleId" value="@(vehicle?.Id ?? 0)" />
+        <div class="mb-3">
+            <label class="form-label" for="file">Upload Document</label>
+            <input type="file" name="file" id="file" class="form-control" />
+            <div class="form-text">
+                Allowed file types are determined by server settings.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+        <a asp-controller="Vehicle" asp-action="Index" class="btn btn-secondary">Back to Garage</a>
+    </form>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-muted">
+        No documents have been uploaded yet for this vehicle. Use <strong>Choose File</strong> and <strong>Upload</strong> to attach receipts or reports.
+    </p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th style="width: 200px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var fileName in Model)
+            {
+                <tr>
+                    <td>@fileName</td>
+                    <td>
+                        <a asp-action="Download"
+                           asp-route-vehicleId="@(vehicle?.Id ?? 0)"
+                           asp-route-fileName="@fileName"
+                           class="btn btn-sm btn-outline-primary">
+                            Download
+                        </a>
+                        <form asp-action="Delete"
+                              asp-route-vehicleId="@(vehicle?.Id ?? 0)"
+                              asp-route-fileName="@fileName"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Delete this file?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,63 @@
+@model IEnumerable<CarCareTracker.Models.Reminder.ReminderCalendarItem>
+
+@{
+    ViewData["Title"] = "Reminder Calendar";
+}
+
+<h1>Reminder Calendar</h1>
+
+<p class="text-muted">
+    Showing all reminders with due dates across vehicles you can access (including odometer-based reminders with due dates).
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-muted">No reminders with due dates are available.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Vehicle</th>
+                    <th>Description</th>
+                    <th class="text-end">Due Date</th>
+                    <th class="text-end">Target Odometer</th>
+                    <th>Urgency</th>
+                    <th>Tags</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Year @item.Make @item.Model (@item.LicensePlate)</td>
+                    <td>@item.Description</td>
+                    <td class="text-end">
+                        @(item.DueDate.HasValue ? item.DueDate.Value.ToShortDateString() : "")
+                    </td>
+                    <td class="text-end">@(item.TargetOdometer.HasValue ? item.TargetOdometer.Value.ToString("N0") : "")</td>
+                    <td>@item.Urgency</td>
+                    <td>@item.Tags</td>
+                    <td>
+                        @if (item.IsCompleted)
+                        {
+                            <span class="badge bg-success">Completed</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Open</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p class="text-muted mt-3">
+    Use the Garage and per-vehicle Reminders pages to edit reminder details.
+</p>
