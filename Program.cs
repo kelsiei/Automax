@@ -1,3 +1,7 @@
+
+
+
+
 using CarCareTracker.Helper;
 using CarCareTracker.Models.Settings;
 using CarCareTracker.Middleware;
@@ -93,7 +97,7 @@ using (var scope = app.Services.CreateScope())
 
     var configHelper = services.GetRequiredService<ConfigHelper>();
     var serverConfig = configHelper.LoadServerConfig();
-
+// app.UseSecurityHeaders();
     var localeHelper = services.GetRequiredService<LocaleHelper>();
     var locOptions = localeHelper.BuildRequestLocalizationOptions(serverConfig);
 
