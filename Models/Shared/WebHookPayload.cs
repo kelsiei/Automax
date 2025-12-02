@@ -1,4 +1,4 @@
-namespace CarCareTracker.Models.Shared;
+namespace Automax.Models.Shared;
 
 public class WebHookPayload
 {

@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using System.Text;
-using CarCareTracker.Helper;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.Reminder;
+using Automax.Helper;
+using Automax.Logic;
+using Automax.Models.Reminder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class ReminderEmailController : Controller
@@ -78,7 +78,7 @@ public class ReminderEmailController : Controller
         {
             try
             {
-                var subject = "CarCareTracker – Upcoming vehicle reminders";
+                var subject = "Automax – Upcoming vehicle reminders";
 
                 var bodyBuilder = new StringBuilder();
 
@@ -100,7 +100,7 @@ public class ReminderEmailController : Controller
                 }
 
                 bodyBuilder.AppendLine();
-                bodyBuilder.AppendLine("This is an automated message from CarCareTracker.");
+                bodyBuilder.AppendLine("This is an automated message from Automax.");
 
                 var body = bodyBuilder.ToString();
 

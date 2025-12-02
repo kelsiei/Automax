@@ -1,10 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.OdometerRecord;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.API;
+using Automax.Models.OdometerRecord;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbOdometerRecordDataAccess : IOdometerRecordDataAccess
 {
@@ -18,7 +18,7 @@ public class LiteDbOdometerRecordDataAccess : IOdometerRecordDataAccess
     public Task<OdometerRecord?> GetOdometerRecordAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<OdometerRecord?>(result);
     }
 
     public Task<List<OdometerRecord>> GetOdometerRecordsForVehicleAsync(int vehicleId, MethodParameter? filter = null)

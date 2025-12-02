@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public interface IPasswordHelper
 {

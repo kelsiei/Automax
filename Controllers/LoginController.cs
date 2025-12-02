@@ -1,19 +1,19 @@
 using System.Security.Claims;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Login;
-using CarCareTracker.Models.User;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.Login;
+using Automax.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [AllowAnonymous]
 public class LoginController : Controller
 {
     private readonly ILogger<LoginController> _logger;
     private readonly IUserRecordDataAccess _userRecordDataAccess;
-    private const string AuthCookieName = "CarCareTrackerAuth";
+    private const string AuthCookieName = "AutomaxAuth";
 
     public LoginController(
         ILogger<LoginController> logger,

@@ -1,10 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.GasRecord;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.API;
+using Automax.Models.GasRecord;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbGasRecordDataAccess : IGasRecordDataAccess
 {
@@ -18,7 +18,7 @@ public class LiteDbGasRecordDataAccess : IGasRecordDataAccess
     public Task<GasRecord?> GetGasRecordAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<GasRecord?>(result);
     }
 
     public Task<List<GasRecord>> GetGasRecordsForVehicleAsync(int vehicleId, MethodParameter? filter = null)

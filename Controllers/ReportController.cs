@@ -1,24 +1,28 @@
 using System.Security.Claims;
 using System.Text;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.Report;
+using Automax.Logic;
+using Automax.Models.Report;
+using Automax.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class ReportController : Controller
 {
     private readonly ILogger<ReportController> _logger;
     private readonly ReportLogic _reportLogic;
+    private readonly UserLogic _userLogic;
 
     public ReportController(
         ILogger<ReportController> logger,
-        ReportLogic reportLogic)
+        ReportLogic reportLogic,
+        UserLogic userLogic)
     {
         _logger = logger;
         _reportLogic = reportLogic;
+        _userLogic = userLogic;
     }
 
     [HttpGet]
@@ -30,7 +34,17 @@ public class ReportController : Controller
             return RedirectToAction("Index", "Login");
         }
 
-        var summaries = await _reportLogic.GetVehicleReportSummariesAsync(userId.Value, isRootUser, searchTerm);
+        List<int>? allowedIds = null;
+        if (!isRootUser)
+        {
+            allowedIds = await _userLogic.GetAccessibleVehicleIdsForUserAsync(userId.Value, isRootUser);
+        }
+
+        var summaries = await _reportLogic.GetVehicleReportSummariesAsync(
+            userId.Value,
+            isRootUser,
+            searchTerm,
+            isRootUser ? null : allowedIds);
         if (showOnlyUrgent)
         {
             summaries = summaries.Where(s => s.HasUrgentReminders).ToList();
@@ -74,7 +88,13 @@ public class ReportController : Controller
             return RedirectToAction("Index", "Login");
         }
 
-        var csv = await _reportLogic.GetVehicleReportCsvAsync(userId.Value, isRootUser);
+        List<int>? allowedIds = null;
+        if (!isRootUser)
+        {
+            allowedIds = await _userLogic.GetAccessibleVehicleIdsForUserAsync(userId.Value, isRootUser);
+        }
+
+        var csv = await _reportLogic.GetVehicleReportCsvAsync(userId.Value, isRootUser, isRootUser ? null : allowedIds);
         var bytes = Encoding.UTF8.GetBytes(csv);
         var fileName = $"vehicle-report-{DateTime.UtcNow:yyyyMMddHHmmss}.csv";
 

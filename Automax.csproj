@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Automax</RootNamespace>
+    <AssemblyName>Automax</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteDB" Version="5.0.17" />
+    <PackageReference Include="Npgsql" Version="8.0.3" />
+    <!-- TODO: Add Npgsql, MailKit, AutoMapper, and other dependencies in later phases -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Automax.Tests\**\*.cs" />
+    <Content Remove="Automax.Tests\**" />
+    <None Remove="Automax.Tests\**" />
+    <EmbeddedResource Remove="Automax.Tests\**" />
+    <Compile Remove="Automax.Migration\**\*.cs" />
+    <Content Remove="Automax.Migration\**" />
+    <None Remove="Automax.Migration\**" />
+    <EmbeddedResource Remove="Automax.Migration\**" />
+  </ItemGroup>
+</Project>

@@ -1,9 +1,9 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Vehicle;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.Vehicle;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbVehicleDataAccess : IVehicleDataAccess
 {
@@ -19,14 +19,26 @@ public class LiteDbVehicleDataAccess : IVehicleDataAccess
     public Task<Vehicle?> GetVehicleAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<Vehicle?>(result);
     }
 
-    public Task<List<Vehicle>> GetVehiclesAsync(int userId)
+    public Task<List<Vehicle>> GetVehiclesAsync(int userId, bool isRootUser, IEnumerable<int>? allowedVehicleIds)
     {
-        // TODO: Use UserAccess to filter by userId in a later phase.
         var result = _collection.FindAll().ToList();
-        return Task.FromResult(result);
+
+        if (isRootUser)
+        {
+            return Task.FromResult(result);
+        }
+
+        if (allowedVehicleIds == null)
+        {
+            return Task.FromResult(new List<Vehicle>());
+        }
+
+        var allowedSet = new HashSet<int>(allowedVehicleIds);
+        var filtered = result.Where(v => allowedSet.Contains(v.Id)).ToList();
+        return Task.FromResult(filtered);
     }
 
     public Task<int> SaveVehicleAsync(Vehicle vehicle)

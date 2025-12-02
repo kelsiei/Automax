@@ -1,4 +1,4 @@
-namespace CarCareTracker.Models.API;
+namespace Automax.Models.API;
 
 public class MethodParameter
 {

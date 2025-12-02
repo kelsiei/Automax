@@ -1,10 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.ServiceRecord;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.API;
+using Automax.Models.ServiceRecord;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbServiceRecordDataAccess : IServiceRecordDataAccess
 {
@@ -18,7 +18,7 @@ public class LiteDbServiceRecordDataAccess : IServiceRecordDataAccess
     public Task<ServiceRecord?> GetServiceRecordAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<ServiceRecord?>(result);
     }
 
     public Task<List<ServiceRecord>> GetServiceRecordsForVehicleAsync(int vehicleId, MethodParameter? filter = null)

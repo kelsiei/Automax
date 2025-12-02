@@ -1,6 +1,6 @@
-using CarCareTracker.External.Interfaces;
+using Automax.External.Interfaces;
 
-namespace CarCareTracker.Logic;
+namespace Automax.Logic;
 
 public class OdometerLogic
 {

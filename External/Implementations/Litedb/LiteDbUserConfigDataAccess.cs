@@ -1,10 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Settings;
-using CarCareTracker.Models.User;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.Settings;
+using Automax.Models.User;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbUserConfigDataAccess : IUserConfigDataAccess
 {
@@ -18,7 +18,7 @@ public class LiteDbUserConfigDataAccess : IUserConfigDataAccess
     public Task<UserConfigData?> GetUserConfigAsync(int userId)
     {
         var result = _collection.FindOne(x => x.UserId == userId);
-        return Task.FromResult(result);
+        return Task.FromResult<UserConfigData?>(result);
     }
 
     public Task SaveUserConfigAsync(int userId, UserConfig config)

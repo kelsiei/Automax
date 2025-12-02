@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using CarCareTracker.Models.Shared;
+using Automax.Models.Shared;
 
-namespace CarCareTracker.Models.ServiceRecord;
+namespace Automax.Models.ServiceRecord;
 
 public class ServiceRecord
 {

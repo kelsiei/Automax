@@ -1,6 +1,6 @@
-using CarCareTracker.Enum;
+using Automax.Enum;
 
-namespace CarCareTracker.Models.Shared;
+namespace Automax.Models.Shared;
 
 public class GenericRecord
 {

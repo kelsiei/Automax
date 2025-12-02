@@ -3,18 +3,17 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CarCareTracker.Middleware;
+namespace Automax.Middleware;
 
 public class Authen : AuthenticationHandler<AuthenticationSchemeOptions>
 {
-    private const string AuthCookieName = "CarCareTrackerAuth";
+    private const string AuthCookieName = "AutomaxAuth";
 
     public Authen(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
-        System.Text.Encodings.Web.UrlEncoder encoder,
-        ISystemClock clock)
-        : base(options, logger, encoder, clock)
+        System.Text.Encodings.Web.UrlEncoder encoder)
+        : base(options, logger, encoder)
     {
     }
 

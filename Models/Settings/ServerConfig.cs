@@ -1,6 +1,6 @@
-using CarCareTracker.Enum;
+using Automax.Enum;
 
-namespace CarCareTracker.Models.Settings;
+namespace Automax.Models.Settings;
 
 public class ServerConfig
 {
@@ -24,5 +24,7 @@ public class ServerConfig
     public long? MaxDocumentUploadBytes { get; set; }
     public bool EnableReminderEmails { get; set; }
     public int? ReminderEmailDaysAhead { get; set; }
+    public string? StorageProvider { get; set; } // e.g., "LiteDb" (default) or "Postgres"
+    public string? PostgresConnectionString { get; set; }
     // TODO: add fields for additional server settings (logos, tabs visibility, etc.) as needed.
 }

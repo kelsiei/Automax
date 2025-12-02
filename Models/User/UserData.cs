@@ -1,4 +1,4 @@
-namespace CarCareTracker.Models.User;
+namespace Automax.Models.User;
 
 public class UserData
 {

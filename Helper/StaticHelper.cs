@@ -1,11 +1,12 @@
 using System.IO;
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public static class StaticHelper
 {
-    public const string VersionNumber = "0.1.0-dev"; // TODO: update from canonical version source.
+    public static readonly string VersionNumber = Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "0.1.0";
 
     public static readonly string DataDirectory = "data";
     public static readonly string ConfigDirectory = Path.Combine(DataDirectory, "config");
@@ -15,8 +16,8 @@ public static class StaticHelper
     public static readonly string TempDirectory = Path.Combine(DataDirectory, "temp");
     public static readonly string WidgetsPath = Path.Combine(DataDirectory, "widgets.html");
 
-    public static string SponsorsPath => "https://example.com/sponsors.json"; // TODO: replace with real sponsors URL from spec.
-    public static string TranslationDirectoryPath => "https://example.com/translations"; // TODO: replace with real translation directory URL.
+    public static string SponsorsPath => Path.Combine(DataDirectory, "sponsors.json");
+    public static string TranslationDirectoryPath => TranslationsDirectory;
 
     public static void EnsureDataDirectoriesExist(ILogger? logger = null)
     {

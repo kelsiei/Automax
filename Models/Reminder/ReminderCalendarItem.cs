@@ -1,6 +1,6 @@
-using CarCareTracker.Enum;
+using Automax.Enum;
 
-namespace CarCareTracker.Models.Reminder;
+namespace Automax.Models.Reminder;
 
 public class ReminderCalendarItem
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarCareTracker.Models.Account;
+namespace Automax.Models.Account;
 
 public class ChangePasswordModel
 {

@@ -1,9 +1,9 @@
 using System.Security.Claims;
-using CarCareTracker.Helper;
+using Automax.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class BackupController : Controller

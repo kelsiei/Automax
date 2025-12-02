@@ -1,9 +1,9 @@
 using System.Text;
-using CarCareTracker.Models.Settings;
+using Automax.Models.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public class FileHelper
 {
@@ -36,7 +36,8 @@ public class FileHelper
             .EnumerateFiles(dir)
             .Select(Path.GetFileName)
             .Where(name => !string.IsNullOrEmpty(name))
-            .ToList()!;
+            .Select(name => name!)
+            .ToList();
 
         return Task.FromResult<IList<string>>(files);
     }

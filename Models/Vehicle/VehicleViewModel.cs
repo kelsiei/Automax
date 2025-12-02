@@ -1,4 +1,4 @@
-namespace CarCareTracker.Models.Vehicle;
+namespace Automax.Models.Vehicle;
 
 public class VehicleViewModel
 {

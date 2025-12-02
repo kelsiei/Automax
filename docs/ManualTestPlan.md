@@ -1,7 +1,7 @@
-# CarCareTracker Manual Test Plan
+# Automax Manual Test Plan
 
 ## 1. Overview
-- **What it is:** CarCareTracker is an ASP.NET Core 8 MVC app for tracking vehicles, odometer/gas/service history, reminders (date/odometer), notes, plans, documents, reports, backups, and user management with role-based access.
+- **What it is:** Automax is an ASP.NET Core 8 MVC app for tracking vehicles, odometer/gas/service history, reminders (date/odometer), notes, plans, documents, reports, backups, and user management with role-based access.
 - **Scope:** Manual end-to-end verification of UI flows, CRUD, filters/pagination, reminder calendar/ICS, documents, reports, settings, admin, backup, reminder emails, security headers, and theme toggle. No performance or load testing.
 - **Out of scope:** External SMTP deliverability (beyond basic send attempt), production hardening, third-party CDNs, mobile native apps.
 - **Assumptions:** Running locally with LiteDB and default data folder; SMTP may not be configured (expect graceful handling); default root user seeds on first login when no users exist.

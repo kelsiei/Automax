@@ -1,10 +1,10 @@
 using System.Net;
 using System.Net.Mail;
-using CarCareTracker.Models.Settings;
+using Automax.Models.Settings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public class MailHelper
 {
@@ -52,7 +52,7 @@ public class MailHelper
                 }
 
                 var fromEmail = string.IsNullOrWhiteSpace(config.FromEmail) ? "no-reply@example.com" : config.FromEmail;
-                var fromName = string.IsNullOrWhiteSpace(config.FromName) ? "CarCareTracker" : config.FromName;
+                var fromName = string.IsNullOrWhiteSpace(config.FromName) ? "Automax" : config.FromName;
 
                 using var message = new MailMessage
                 {
@@ -75,12 +75,12 @@ public class MailHelper
 
     public Task SendTestEmailAsync(string toEmail, CancellationToken cancellationToken = default)
     {
-        const string subject = "CarCareTracker test email";
-        const string body = "This is a test email from CarCareTracker.";
+        const string subject = "Automax test email";
+        const string body = "This is a test email from Automax.";
         return SendEmailAsync(toEmail, subject, body, cancellationToken);
     }
 
-    public Task SendReminderDigestEmailAsync(string toEmail, string subject, string body, CancellationToken cancellationToken = default)
+    public virtual Task SendReminderDigestEmailAsync(string toEmail, string subject, string body, CancellationToken cancellationToken = default)
     {
         return SendEmailAsync(toEmail, subject, body, cancellationToken);
     }

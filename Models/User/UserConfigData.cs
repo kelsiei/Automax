@@ -1,6 +1,6 @@
-using CarCareTracker.Models.Settings;
+using Automax.Models.Settings;
 
-namespace CarCareTracker.Models.User;
+namespace Automax.Models.User;
 
 public class UserConfigData
 {

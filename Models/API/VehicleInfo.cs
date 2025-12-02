@@ -1,6 +1,6 @@
-using CarCareTracker.Models.Vehicle;
+using Automax.Models.Vehicle;
 
-namespace CarCareTracker.Models.API;
+namespace Automax.Models.API;
 
 public class VehicleInfo
 {

@@ -2,7 +2,7 @@ using LiteDB;
 using System.IO;
 using Microsoft.Extensions.Logging;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public class LiteDBHelper : IDisposable
 {

@@ -1,0 +1,116 @@
+2025-11-30 19:30:48.513 PST [48824] LOG:  starting PostgreSQL 18.1 on x86_64-windows, compiled by msvc-19.44.35219, 64-bit
+2025-11-30 19:30:48.518 PST [48824] LOG:  listening on IPv6 address "::1", port 55432
+2025-11-30 19:30:48.518 PST [48824] LOG:  listening on IPv4 address "127.0.0.1", port 55432
+2025-11-30 19:30:48.712 PST [48688] LOG:  database system was shut down at 2025-11-30 19:30:44 PST
+2025-11-30 19:30:48.721 PST [48824] LOG:  database system is ready to accept connections
+2025-11-30 19:35:48.641 PST [55632] LOG:  checkpoint starting: time
+2025-11-30 19:37:50.980 PST [55632] LOG:  checkpoint complete: wrote 1054 buffers (6.4%), wrote 3 SLRU buffers; 1 WAL file(s) added, 0 removed, 0 recycled; write=121.970 s, sync=0.205 s, total=122.340 s; sync files=497, longest=0.003 s, average=0.001 s; distance=5358 kB, estimate=5358 kB; lsn=0/1DF61E0, redo lsn=0/1D2CC60
+2025-11-30 19:38:49.716 PST [43332] ERROR:  relation "user_access" already exists
+2025-11-30 19:38:49.716 PST [43332] STATEMENT:  CREATE TABLE user_access (
+	    id              SERIAL PRIMARY KEY,
+	    user_id         INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+	    vehicle_id      INTEGER NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
+	    can_edit        BOOLEAN NOT NULL DEFAULT TRUE
+	);
+2025-11-30 19:38:49.720 PST [43332] ERROR:  relation "ux_user_access_user_vehicle" already exists
+2025-11-30 19:38:49.720 PST [43332] STATEMENT:  CREATE UNIQUE INDEX ux_user_access_user_vehicle ON user_access(user_id, vehicle_id);
+2025-11-30 19:38:49.724 PST [43332] ERROR:  relation "user_configs" already exists
+2025-11-30 19:38:49.724 PST [43332] STATEMENT:  CREATE TABLE user_configs (
+	    id              SERIAL PRIMARY KEY,
+	    user_id         INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+	    preferred_units VARCHAR(50),
+	    dashboard_tabs  TEXT,
+	    raw_json        JSONB
+	);
+2025-11-30 19:38:49.730 PST [43332] ERROR:  relation "odometer_records" already exists
+2025-11-30 19:38:49.730 PST [43332] STATEMENT:  CREATE TABLE odometer_records (
+	    id              SERIAL PRIMARY KEY,
+	    vehicle_id      INTEGER NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
+	    date_recorded   DATE NOT NULL,
+	    odometer        INTEGER NOT NULL,
+	    notes           TEXT
+	);
+2025-11-30 19:38:49.735 PST [43332] ERROR:  relation "idx_odo_vehicle_date" already exists
+2025-11-30 19:38:49.735 PST [43332] STATEMENT:  CREATE INDEX idx_odo_vehicle_date ON odometer_records(vehicle_id, date_recorded);
+2025-11-30 19:38:49.738 PST [43332] ERROR:  relation "plan_records" already exists
+2025-11-30 19:38:49.738 PST [43332] STATEMENT:  CREATE TABLE plan_records (
+	    id              SERIAL PRIMARY KEY,
+	    vehicle_id      INTEGER NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
+	    progress        VARCHAR(50),
+	    priority        VARCHAR(50),
+	    title           VARCHAR(255),
+	    description     TEXT,
+	    is_archived     BOOLEAN NOT NULL DEFAULT FALSE,
+	    target_date     DATE
+	);
+2025-11-30 19:38:49.744 PST [43332] ERROR:  relation "idx_plan_vehicle" already exists
+2025-11-30 19:38:49.744 PST [43332] STATEMENT:  CREATE INDEX idx_plan_vehicle ON plan_records(vehicle_id);
+2025-11-30 19:38:49.748 PST [43332] ERROR:  relation "notes" already exists
+2025-11-30 19:38:49.748 PST [43332] STATEMENT:  CREATE TABLE notes (
+	    id              SERIAL PRIMARY KEY,
+	    vehicle_id      INTEGER NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
+	    created_at      TIMESTAMPTZ DEFAULT NOW(),
+	    content         TEXT
+	);
+2025-11-30 19:38:49.754 PST [43332] ERROR:  relation "idx_notes_vehicle" already exists
+2025-11-30 19:38:49.754 PST [43332] STATEMENT:  CREATE INDEX idx_notes_vehicle ON notes(vehicle_id);
+2025-11-30 19:38:49.757 PST [43332] ERROR:  relation "record_extra_fields" already exists
+2025-11-30 19:38:49.757 PST [43332] STATEMENT:  CREATE TABLE record_extra_fields (
+	    id          SERIAL PRIMARY KEY,
+	    record_id   INTEGER NOT NULL,
+	    name        TEXT NOT NULL,
+	    value       TEXT,
+	    type        TEXT NOT NULL
+	);
+2025-11-30 19:38:49.762 PST [43332] ERROR:  relation "idx_extra_fields_record" already exists
+2025-11-30 19:38:49.762 PST [43332] STATEMENT:  CREATE INDEX idx_extra_fields_record ON record_extra_fields(record_id);
+2025-11-30 19:38:49.766 PST [43332] ERROR:  relation "server_config" already exists
+2025-11-30 19:38:49.766 PST [43332] STATEMENT:  CREATE TABLE server_config (
+	    id              SERIAL PRIMARY KEY,
+	    raw_json        JSONB NOT NULL
+	);
+2025-11-30 19:39:31.002 PST [33396] ERROR:  null value in column "first_name" of relation "users" violates not-null constraint
+2025-11-30 19:39:31.002 PST [33396] DETAIL:  Failing row contains (4, null, null, access_acdd94e8dcc9479eb493000e5e6511d8, hash, user, access_acdd94e8dcc9479eb493000e5e6511d8@example.com, 2025-11-30 19:39:31.001866-08, f, f).
+2025-11-30 19:39:31.002 PST [33396] STATEMENT:  INSERT INTO users
+	                    (username, email_address, password_hash, is_admin, is_root_user)
+	                    VALUES ($1, $2, $3, $4, $5)
+	                    RETURNING id
+2025-11-30 19:39:31.069 PST [33396] ERROR:  null value in column "first_name" of relation "users" violates not-null constraint
+2025-11-30 19:39:31.069 PST [33396] DETAIL:  Failing row contains (5, null, null, usercfg_bb807fb78f674d6ca47acc42c5f61387, hash, user, usercfg_bb807fb78f674d6ca47acc42c5f61387@example.com, 2025-11-30 19:39:31.069619-08, f, f).
+2025-11-30 19:39:31.069 PST [33396] STATEMENT:  INSERT INTO users
+	                    (username, email_address, password_hash, is_admin, is_root_user)
+	                    VALUES ($1, $2, $3, $4, $5)
+	                    RETURNING id
+2025-11-30 19:39:31.073 PST [33396] ERROR:  null value in column "first_name" of relation "users" violates not-null constraint
+2025-11-30 19:39:31.073 PST [33396] DETAIL:  Failing row contains (6, null, null, user_18978a1275e3415b95630272af3291ac, hash, user, user_18978a1275e3415b95630272af3291ac@example.com, 2025-11-30 19:39:31.07317-08, f, f).
+2025-11-30 19:39:31.073 PST [33396] STATEMENT:  INSERT INTO users
+	                    (username, email_address, password_hash, is_admin, is_root_user)
+	                    VALUES ($1, $2, $3, $4, $5)
+	                    RETURNING id
+2025-11-30 19:40:00.569 PST [8816] ERROR:  column "raw_json" is of type jsonb but expression is of type text at character 75
+2025-11-30 19:40:00.569 PST [8816] HINT:  You will need to rewrite or cast the expression.
+2025-11-30 19:40:00.569 PST [8816] STATEMENT:  UPDATE user_configs
+	                                       SET raw_json = $1
+	                                       WHERE user_id = $2
+2025-11-30 19:40:48.248 PST [55632] LOG:  checkpoint starting: time
+2025-11-30 19:41:27.324 PST [55632] LOG:  checkpoint complete: wrote 351 buffers (2.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=38.394 s, sync=0.200 s, total=39.076 s; sync files=770, longest=0.007 s, average=0.001 s; distance=4586 kB, estimate=5281 kB; lsn=0/22C5388, redo lsn=0/21A7790
+2025-11-30 19:45:48.411 PST [55632] LOG:  checkpoint starting: time
+2025-11-30 19:46:05.286 PST [55632] LOG:  checkpoint complete: wrote 154 buffers (0.9%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=16.866 s, sync=0.005 s, total=16.875 s; sync files=42, longest=0.002 s, average=0.001 s; distance=1146 kB, estimate=4867 kB; lsn=0/22C6358, redo lsn=0/22C62C8
+2025-11-30 20:30:48.362 PST [55632] LOG:  checkpoint starting: time
+2025-11-30 20:31:15.612 PST [55632] LOG:  checkpoint complete: wrote 249 buffers (1.5%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=27.207 s, sync=0.018 s, total=27.251 s; sync files=225, longest=0.001 s, average=0.001 s; distance=1368 kB, estimate=4517 kB; lsn=0/241C4D0, redo lsn=0/241C440
+2025-11-30 21:25:48.810 PST [55632] LOG:  checkpoint starting: time
+2025-11-30 21:25:49.032 PST [55632] LOG:  checkpoint complete: wrote 2 buffers (0.0%), wrote 0 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.215 s, sync=0.002 s, total=0.222 s; sync files=1, longest=0.002 s, average=0.002 s; distance=8 kB, estimate=4066 kB; lsn=0/241E848, redo lsn=0/241E7F0
+2025-11-30 22:00:48.075 PST [55632] LOG:  checkpoint starting: time
+2025-11-30 22:01:20.968 PST [55632] LOG:  checkpoint complete: wrote 298 buffers (1.8%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=32.655 s, sync=0.081 s, total=32.894 s; sync files=229, longest=0.003 s, average=0.001 s; distance=1786 kB, estimate=3838 kB; lsn=0/2608730, redo lsn=0/25DD180
+2025-12-01 00:40:41.203 PST [55632] LOG:  checkpoint starting: time
+2025-12-01 00:41:09.198 PST [55632] LOG:  checkpoint complete: wrote 254 buffers (1.6%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=27.782 s, sync=0.082 s, total=27.996 s; sync files=227, longest=0.003 s, average=0.001 s; distance=1409 kB, estimate=3595 kB; lsn=0/273D7A8, redo lsn=0/273D718
+2025-12-01 01:55:41.493 PST [55632] LOG:  checkpoint starting: time
+2025-12-01 01:55:48.504 PST [55632] LOG:  checkpoint complete: wrote 64 buffers (0.4%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=6.997 s, sync=0.006 s, total=7.011 s; sync files=58, longest=0.002 s, average=0.001 s; distance=90 kB, estimate=3245 kB; lsn=0/2754138, redo lsn=0/27540E0
+2025-12-01 02:25:41.576 PST [55632] LOG:  checkpoint starting: time
+2025-12-01 02:25:48.144 PST [55632] LOG:  checkpoint complete: wrote 60 buffers (0.4%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=6.555 s, sync=0.006 s, total=6.568 s; sync files=59, longest=0.001 s, average=0.001 s; distance=82 kB, estimate=2929 kB; lsn=0/2768B10, redo lsn=0/2768A80
+2025-12-01 02:30:41.216 PST [55632] LOG:  checkpoint starting: time
+2025-12-01 02:30:48.763 PST [55632] LOG:  checkpoint complete: wrote 69 buffers (0.4%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=7.536 s, sync=0.006 s, total=7.548 s; sync files=62, longest=0.001 s, average=0.001 s; distance=165 kB, estimate=2652 kB; lsn=0/2792130, redo lsn=0/27920D8
+2025-12-01 02:35:41.835 PST [55632] LOG:  checkpoint starting: time
+2025-12-01 02:35:48.403 PST [55632] LOG:  checkpoint complete: wrote 60 buffers (0.4%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=6.557 s, sync=0.005 s, total=6.569 s; sync files=58, longest=0.001 s, average=0.001 s; distance=98 kB, estimate=2397 kB; lsn=0/27AA9C8, redo lsn=0/27AA938
+2025-12-01 02:40:41.459 PST [55632] LOG:  checkpoint starting: time
+2025-12-01 02:40:48.787 PST [55632] LOG:  checkpoint complete: wrote 67 buffers (0.4%), wrote 2 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=7.315 s, sync=0.008 s, total=7.329 s; sync files=61, longest=0.001 s, average=0.001 s; distance=152 kB, estimate=2172 kB; lsn=0/27D0CC0, redo lsn=0/27D0C30

@@ -1,11 +1,12 @@
 using System.Security.Claims;
-using CarCareTracker.Helper;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.API;
+using System.Text;
+using Automax.Helper;
+using Automax.Logic;
+using Automax.Models.API;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 [ApiController]
@@ -15,15 +16,24 @@ public class APIController : ControllerBase
     private readonly ILogger<APIController> _logger;
     private readonly VehicleLogic _vehicleLogic;
     private readonly UserLogic _userLogic;
+    private readonly ReminderLogic _reminderLogic;
+    private readonly ReminderHelper _reminderHelper;
+    private readonly BackupHelper _backupHelper;
 
     public APIController(
         ILogger<APIController> logger,
         VehicleLogic vehicleLogic,
-        UserLogic userLogic)
+        UserLogic userLogic,
+        ReminderLogic reminderLogic,
+        ReminderHelper reminderHelper,
+        BackupHelper backupHelper)
     {
         _logger = logger;
         _vehicleLogic = vehicleLogic;
         _userLogic = userLogic;
+        _reminderLogic = reminderLogic;
+        _reminderHelper = reminderHelper;
+        _backupHelper = backupHelper;
     }
 
     /// <summary>
@@ -50,6 +60,79 @@ public class APIController : ControllerBase
         };
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Returns an iCalendar feed containing reminders accessible to the current user.
+    /// </summary>
+    [HttpGet("calendar")]
+    public async Task<IActionResult> GetCalendar()
+    {
+        if (!TryGetUserContext(out var userId, out var isRootUser))
+        {
+            return Unauthorized();
+        }
+
+        var reminders = await _reminderLogic.GetDateBasedRemindersForUserAsync(userId, isRootUser);
+        var calendarName = "Automax Reminders";
+        var ics = _reminderHelper.BuildICalendarFeed(reminders, calendarName);
+        var bytes = Encoding.UTF8.GetBytes(ics);
+        var fileName = $"automax-reminders-{DateTime.UtcNow:yyyyMMddHHmmss}.ics";
+
+        return File(bytes, "text/calendar; charset=utf-8", fileName);
+    }
+
+    /// <summary>
+    /// Returns a ZIP archive backup of application data (root users only).
+    /// </summary>
+    [HttpGet("backup")]
+    public IActionResult DownloadBackup()
+    {
+        if (!TryGetUserContext(out var userId, out var isRootUser))
+        {
+            return Unauthorized();
+        }
+
+        if (!isRootUser)
+        {
+            return Forbid();
+        }
+
+        var (content, fileName) = _backupHelper.CreateLiteDbBackupZip();
+        _logger.LogInformation("User {UserId} downloaded a backup archive via API.", userId);
+        return File(content, "application/zip", fileName);
+    }
+
+    /// <summary>
+    /// Restores application data from a provided backup archive (root users only).
+    /// </summary>
+    [HttpPost("restore")]
+    public async Task<IActionResult> RestoreBackup(IFormFile? file)
+    {
+        if (!TryGetUserContext(out var userId, out var isRootUser))
+        {
+            return Unauthorized();
+        }
+
+        if (!isRootUser)
+        {
+            return Forbid();
+        }
+
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("A backup file is required.");
+        }
+
+        using var stream = file.OpenReadStream();
+        var success = await _backupHelper.RestoreLiteDbBackupAsync(stream);
+        if (!success)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to restore backup.");
+        }
+
+        _logger.LogInformation("User {UserId} restored data from backup via API.", userId);
+        return Ok();
     }
 
     /// <summary>

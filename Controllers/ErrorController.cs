@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 public class ErrorController : Controller
 {

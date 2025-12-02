@@ -1,11 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.Note;
-using LiteDB;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.API;
+using Automax.Models.Note;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbNoteDataAccess : INoteDataAccess
 {
@@ -19,7 +18,7 @@ public class LiteDbNoteDataAccess : INoteDataAccess
     public Task<Note?> GetNoteAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<Note?>(result);
     }
 
     public Task<List<Note>> GetNotesForVehicleAsync(int vehicleId, MethodParameter? filter = null)

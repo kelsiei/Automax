@@ -1,7 +1,7 @@
-using CarCareTracker.Enum;
-using CarCareTracker.Models.Shared;
+using Automax.Enum;
+using Automax.Models.Shared;
 
-namespace CarCareTracker.Models.Vehicle;
+namespace Automax.Models.Vehicle;
 
 public class Vehicle
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarCareTracker.Models.Login;
+namespace Automax.Models.Login;
 
 public class LoginModel
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarCareTracker.Models.Admin;
+namespace Automax.Models.Admin;
 
 public class AdminUserEditModel
 {

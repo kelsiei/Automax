@@ -1,14 +1,14 @@
 using System.Security.Claims;
 using System.Text;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.Reminder;
-using CarCareTracker.Models.Vehicle;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Logic;
+using Automax.Models.Reminder;
+using Automax.Models.Vehicle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class ReminderController : Controller
@@ -249,10 +249,10 @@ public class ReminderController : Controller
         }
 
         var reminders = await _reminderLogic.GetDateBasedRemindersForUserAsync(userId.Value, isRootUser);
-        var calendarName = "CarCareTracker Reminders";
+        var calendarName = "Automax Reminders";
         var ics = _reminderHelper.BuildICalendarFeed(reminders, calendarName);
         var bytes = Encoding.UTF8.GetBytes(ics);
-        var fileName = $"carcare-reminders-{DateTime.UtcNow:yyyyMMddHHmmss}.ics";
+        var fileName = $"automax-reminders-{DateTime.UtcNow:yyyyMMddHHmmss}.ics";
 
         return File(bytes, "text/calendar", fileName);
     }

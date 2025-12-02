@@ -1,7 +1,7 @@
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.PlanRecord;
+using Automax.Models.API;
+using Automax.Models.PlanRecord;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IPlanRecordDataAccess
 {

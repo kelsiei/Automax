@@ -1,10 +1,10 @@
-namespace CarCareTracker.Models.Shared;
+namespace Automax.Models.Shared;
 
 public class ExtraField
 {
     public string Name { get; set; } = string.Empty;
     public string? Value { get; set; }
-    public CarCareTracker.Enum.ExtraFieldType Type { get; set; } = CarCareTracker.Enum.ExtraFieldType.Text;
+    public Automax.Enum.ExtraFieldType Type { get; set; } = Automax.Enum.ExtraFieldType.Text;
     // TODO: add metadata such as content type, options, and validation rules.
 }
 
@@ -14,7 +14,7 @@ public class RecordExtraField
     public int RecordId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Value { get; set; }
-    public CarCareTracker.Enum.ExtraFieldType Type { get; set; } = CarCareTracker.Enum.ExtraFieldType.Text;
+    public Automax.Enum.ExtraFieldType Type { get; set; } = Automax.Enum.ExtraFieldType.Text;
     // TODO: add metadata and linkage details as needed.
 }
 
