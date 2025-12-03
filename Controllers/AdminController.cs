@@ -193,6 +193,64 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpGet]
+    public IActionResult Password()
+    {
+        var (_, isRootUser) = GetCurrentUserContext();
+        if (!isRootUser)
+        {
+            return Forbid();
+        }
+
+        return View(new AdminPasswordUpdateViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Password(AdminPasswordUpdateViewModel model)
+    {
+        var (userId, isRootUser) = GetCurrentUserContext();
+        if (!isRootUser)
+        {
+            return Forbid();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        if (model.NewPassword != model.ConfirmPassword)
+        {
+            ModelState.AddModelError(nameof(model.ConfirmPassword), "New password and confirmation do not match.");
+            return View(model);
+        }
+
+        if (userId == null)
+        {
+            return RedirectToAction("Index", "Login");
+        }
+
+        var user = await _userRecordDataAccess.GetUserByIdAsync(userId.Value);
+        if (user == null)
+        {
+            ModelState.AddModelError(string.Empty, "Unable to find your user record.");
+            return View(model);
+        }
+
+        if (!_passwordHelper.VerifyPassword(model.OldPassword, user.PasswordHash))
+        {
+            ModelState.AddModelError(nameof(model.OldPassword), "The current password is incorrect.");
+            return View(model);
+        }
+
+        user.PasswordHash = _passwordHelper.HashPassword(model.NewPassword);
+        await _userRecordDataAccess.SaveUserAsync(user);
+
+        TempData["StatusMessage"] = "Your admin password has been updated.";
+        return RedirectToAction(nameof(Password));
+    }
+
     private (int? UserId, bool IsRootUser) GetCurrentUserContext()
     {
         int? userId = null;

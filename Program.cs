@@ -18,9 +18,6 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
-builder.Services.Configure<ServerConfig>(
-    builder.Configuration.GetSection("ServerConfig"));
-
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<ConfigHelper>();
@@ -32,11 +29,43 @@ builder.Services.AddSingleton<BackupHelper>();
 builder.Services.AddSingleton<IPasswordHelper, PasswordHelper>();
 builder.Services.AddSingleton<LocaleHelper>();
 
-// Data access (LiteDB backend - default for now)
-var serverConfig = builder.Configuration.GetSection("ServerConfig").Get<ServerConfig>() ?? new ServerConfig();
-var storageProvider = serverConfig.StorageProvider?.Trim() ?? "LiteDb";
+var envPostgres = Environment.GetEnvironmentVariable("AUTOMAX_POSTGRES_CONNECTION_STRING");
+builder.Services.Configure<ServerConfig>(options =>
+{
+    builder.Configuration.GetSection("ServerConfig").Bind(options);
+    if (!string.IsNullOrWhiteSpace(envPostgres))
+    {
+        options.PostgresConnectionString = envPostgres;
+    }
 
-// LiteDB is the default, production-ready path. Postgres is experimental and opt-in.
+    if (builder.Environment.IsProduction())
+    {
+        options.StorageProvider = "Postgres";
+    }
+    else
+    {
+        options.StorageProvider ??= "LiteDb";
+    }
+});
+
+// Data access (Postgres preferred; LiteDB allowed for development)
+var serverConfig = builder.Configuration.GetSection("ServerConfig").Get<ServerConfig>() ?? new ServerConfig();
+if (!string.IsNullOrWhiteSpace(envPostgres))
+{
+    serverConfig.PostgresConnectionString = envPostgres;
+}
+serverConfig.StorageProvider = builder.Environment.IsProduction()
+    ? "Postgres"
+    : serverConfig.StorageProvider?.Trim() ?? "LiteDb";
+
+var storageProvider = serverConfig.StorageProvider ?? "LiteDb";
+
+if (storageProvider.Equals("Postgres", StringComparison.OrdinalIgnoreCase)
+    && string.IsNullOrWhiteSpace(serverConfig.PostgresConnectionString))
+{
+    throw new InvalidOperationException("Postgres storage is selected but no connection string is configured. Set AUTOMAX_POSTGRES_CONNECTION_STRING or ServerConfig:PostgresConnectionString.");
+}
+
 if (!storageProvider.Equals("Postgres", StringComparison.OrdinalIgnoreCase))
 {
     builder.Services.AddScoped<IVehicleDataAccess, LiteDbVehicleDataAccess>();
@@ -54,7 +83,7 @@ if (!storageProvider.Equals("Postgres", StringComparison.OrdinalIgnoreCase))
 }
 else
 {
-    // Postgres provider is experimental; vehicles/gas/odometer/service/plan/reminders/notes/users/user configs/access are implemented, others remain on LiteDB.
+    // Postgres provider is the production path; vehicles/gas/odometer/service/plan/reminders/notes/users/user configs/access are implemented, others remain on LiteDB.
     builder.Services.AddSingleton<PostgresConnectionFactory>();
     builder.Services.AddScoped<IVehicleDataAccess, PostgresVehicleDataAccess>();
     builder.Services.AddScoped<IGasRecordDataAccess, PostgresGasRecordDataAccess>();

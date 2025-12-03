@@ -114,3 +114,9 @@
 2025-12-01 02:35:48.403 PST [55632] LOG:  checkpoint complete: wrote 60 buffers (0.4%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=6.557 s, sync=0.005 s, total=6.569 s; sync files=58, longest=0.001 s, average=0.001 s; distance=98 kB, estimate=2397 kB; lsn=0/27AA9C8, redo lsn=0/27AA938
 2025-12-01 02:40:41.459 PST [55632] LOG:  checkpoint starting: time
 2025-12-01 02:40:48.787 PST [55632] LOG:  checkpoint complete: wrote 67 buffers (0.4%), wrote 2 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=7.315 s, sync=0.008 s, total=7.329 s; sync files=61, longest=0.001 s, average=0.001 s; distance=152 kB, estimate=2172 kB; lsn=0/27D0CC0, redo lsn=0/27D0C30
+2025-12-02 22:46:39.300 PST [29136] LOG:  starting PostgreSQL 18.1 on x86_64-windows, compiled by msvc-19.44.35219, 64-bit
+2025-12-02 22:46:39.303 PST [29136] LOG:  could not bind IPv6 address "::1": Permission denied
+2025-12-02 22:46:39.303 PST [29136] LOG:  could not bind IPv4 address "127.0.0.1": Permission denied
+2025-12-02 22:46:39.303 PST [29136] WARNING:  could not create listen socket for "localhost"
+2025-12-02 22:46:39.303 PST [29136] FATAL:  could not create any TCP/IP sockets
+2025-12-02 22:46:39.305 PST [29136] LOG:  database system is shut down

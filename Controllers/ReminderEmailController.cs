@@ -40,10 +40,14 @@ public class ReminderEmailController : Controller
         var serverConfig = _configHelper.LoadServerConfig();
         var digests = await _reminderEmailLogic.BuildReminderEmailDigestsAsync();
 
-        ViewBag.EnableReminderEmails = serverConfig.EnableReminderEmails;
-        ViewBag.ReminderEmailDaysAhead = serverConfig.ReminderEmailDaysAhead;
+        var model = new ReminderEmailViewModel
+        {
+            EnableReminderEmails = serverConfig.EnableReminderEmails,
+            ReminderEmailDaysAhead = serverConfig.ReminderEmailDaysAhead,
+            Digests = digests
+        };
 
-        return View(digests);
+        return View(model);
     }
 
     [HttpPost]

@@ -35,13 +35,35 @@ public class SettingsController : Controller
         {
             Motd = serverConfig.Motd ?? string.Empty,
             EnableAuth = serverConfig.EnableAuth,
+            OpenRegistration = serverConfig.OpenRegistration,
+            DisableRegistration = serverConfig.DisableRegistration,
+            EnableRootUserOidc = serverConfig.EnableRootUserOidc,
             LocaleOverride = serverConfig.LocaleOverride ?? string.Empty,
             LocaleDateTimeOverride = serverConfig.LocaleDateTimeOverride ?? string.Empty,
             MaxDocumentUploadSizeMb = serverConfig.MaxDocumentUploadBytes.HasValue && serverConfig.MaxDocumentUploadBytes.Value > 0
                 ? (int?)(serverConfig.MaxDocumentUploadBytes.Value / (1024 * 1024))
                 : null,
             EnableReminderEmails = serverConfig.EnableReminderEmails,
-            ReminderEmailDaysAhead = serverConfig.ReminderEmailDaysAhead
+            ReminderEmailDaysAhead = serverConfig.ReminderEmailDaysAhead,
+            DefaultReminderEmail = serverConfig.DefaultReminderEmail ?? string.Empty,
+            CustomLogoUrl = serverConfig.CustomLogoUrl ?? string.Empty,
+            WebHookUrl = serverConfig.WebHookUrl ?? string.Empty,
+            AllowedFileExtensions = serverConfig.AllowedFileExtensions != null
+                ? string.Join(", ", serverConfig.AllowedFileExtensions)
+                : string.Empty,
+            InvariantApiEnabled = serverConfig.InvariantApiEnabled,
+            CustomWidgetsEnabled = serverConfig.CustomWidgetsEnabled,
+            Domain = serverConfig.Domain ?? string.Empty,
+            MailHost = serverConfig.MailConfig?.Host ?? string.Empty,
+            MailPort = serverConfig.MailConfig?.Port,
+            MailUserName = serverConfig.MailConfig?.UserName ?? string.Empty,
+            MailPassword = serverConfig.MailConfig?.Password ?? string.Empty,
+            MailUseSsl = serverConfig.MailConfig?.UseSsl ?? false,
+            MailFromEmail = serverConfig.MailConfig?.FromEmail ?? string.Empty,
+            MailFromName = serverConfig.MailConfig?.FromName ?? string.Empty,
+            UrgencyDaysUntilUrgent = serverConfig.ReminderUrgencyConfig?.DaysUntilUrgent,
+            UrgencyDaysUntilVeryUrgent = serverConfig.ReminderUrgencyConfig?.DaysUntilVeryUrgent,
+            UrgencyDaysUntilPastDue = serverConfig.ReminderUrgencyConfig?.DaysUntilPastDue
         };
 
         return View(vm);
@@ -68,6 +90,9 @@ public class SettingsController : Controller
             ? null
             : model.Motd.Trim();
         serverConfig.EnableAuth = model.EnableAuth;
+        serverConfig.OpenRegistration = model.OpenRegistration;
+        serverConfig.DisableRegistration = model.DisableRegistration;
+        serverConfig.EnableRootUserOidc = model.EnableRootUserOidc;
         serverConfig.LocaleOverride = string.IsNullOrWhiteSpace(model.LocaleOverride)
             ? null
             : model.LocaleOverride.Trim();
@@ -81,6 +106,47 @@ public class SettingsController : Controller
         serverConfig.ReminderEmailDaysAhead = model.ReminderEmailDaysAhead.HasValue && model.ReminderEmailDaysAhead.Value > 0
             ? model.ReminderEmailDaysAhead.Value
             : null;
+        serverConfig.DefaultReminderEmail = string.IsNullOrWhiteSpace(model.DefaultReminderEmail)
+            ? null
+            : model.DefaultReminderEmail.Trim();
+        serverConfig.CustomLogoUrl = string.IsNullOrWhiteSpace(model.CustomLogoUrl)
+            ? null
+            : model.CustomLogoUrl.Trim();
+        serverConfig.WebHookUrl = string.IsNullOrWhiteSpace(model.WebHookUrl)
+            ? null
+            : model.WebHookUrl.Trim();
+        serverConfig.AllowedFileExtensions = string.IsNullOrWhiteSpace(model.AllowedFileExtensions)
+            ? new List<string>()
+            : model.AllowedFileExtensions.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim())
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToList();
+        serverConfig.InvariantApiEnabled = model.InvariantApiEnabled;
+        serverConfig.CustomWidgetsEnabled = model.CustomWidgetsEnabled;
+        serverConfig.Domain = string.IsNullOrWhiteSpace(model.Domain) ? null : model.Domain.Trim();
+
+        serverConfig.MailConfig ??= new MailConfig();
+        serverConfig.MailConfig.Host = string.IsNullOrWhiteSpace(model.MailHost) ? null : model.MailHost.Trim();
+        serverConfig.MailConfig.Port = model.MailPort ?? 0;
+        serverConfig.MailConfig.UserName = string.IsNullOrWhiteSpace(model.MailUserName) ? null : model.MailUserName.Trim();
+        serverConfig.MailConfig.Password = string.IsNullOrWhiteSpace(model.MailPassword) ? null : model.MailPassword;
+        serverConfig.MailConfig.UseSsl = model.MailUseSsl;
+        serverConfig.MailConfig.FromEmail = string.IsNullOrWhiteSpace(model.MailFromEmail) ? null : model.MailFromEmail.Trim();
+        serverConfig.MailConfig.FromName = string.IsNullOrWhiteSpace(model.MailFromName) ? null : model.MailFromName.Trim();
+
+        serverConfig.ReminderUrgencyConfig ??= new ReminderUrgencyConfig();
+        if (model.UrgencyDaysUntilUrgent.HasValue)
+        {
+            serverConfig.ReminderUrgencyConfig.DaysUntilUrgent = model.UrgencyDaysUntilUrgent.Value;
+        }
+        if (model.UrgencyDaysUntilVeryUrgent.HasValue)
+        {
+            serverConfig.ReminderUrgencyConfig.DaysUntilVeryUrgent = model.UrgencyDaysUntilVeryUrgent.Value;
+        }
+        if (model.UrgencyDaysUntilPastDue.HasValue)
+        {
+            serverConfig.ReminderUrgencyConfig.DaysUntilPastDue = model.UrgencyDaysUntilPastDue.Value;
+        }
 
         _configHelper.SaveServerConfig(serverConfig);
 

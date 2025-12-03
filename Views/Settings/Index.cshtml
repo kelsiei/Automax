@@ -13,14 +13,19 @@
     </div>
 }
 
-<p class="text-muted">
-    These settings apply to the entire application and should typically only be changed by a root user.
-</p>
+<div class="mb-3">
+    <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="Password">Update admin password</a>
+</div>
 
-<form asp-action="Index" method="post">
+<form asp-action="Index" method="post" class="mb-4">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+    <p class="text-muted">
+        These settings apply to the entire application and should typically only be changed by a root user.
+    </p>
+
+    <h4>General</h4>
     <div class="mb-3">
         <label asp-for="Motd" class="form-label"></label>
         <textarea asp-for="Motd" class="form-control" rows="3"></textarea>
@@ -36,6 +41,33 @@
         <span asp-validation-for="EnableAuth" class="text-danger"></span>
         <div class="form-text">
             When enabled, most pages require a logged-in user. When disabled, the app may allow anonymous access.
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="OpenRegistration" class="form-check-input" />
+        <label asp-for="OpenRegistration" class="form-check-label"></label>
+        <span asp-validation-for="OpenRegistration" class="text-danger"></span>
+        <div class="form-text">
+            Allow anyone to register without invitation.
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="DisableRegistration" class="form-check-input" />
+        <label asp-for="DisableRegistration" class="form-check-label"></label>
+        <span asp-validation-for="DisableRegistration" class="text-danger"></span>
+        <div class="form-text">
+            Prevent new registrations entirely (even if open registration is enabled elsewhere).
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="EnableRootUserOidc" class="form-check-input" />
+        <label asp-for="EnableRootUserOidc" class="form-check-label"></label>
+        <span asp-validation-for="EnableRootUserOidc" class="text-danger"></span>
+        <div class="form-text">
+            Enable OIDC for root user sign-in (if configured).
         </div>
     </div>
 
@@ -58,11 +90,103 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Domain" class="form-label"></label>
+        <input asp-for="Domain" class="form-control" />
+        <span asp-validation-for="Domain" class="text-danger"></span>
+        <div class="form-text">
+            Optional domain override for links and branding.
+        </div>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="MaxDocumentUploadSizeMb" class="form-label"></label>
         <input asp-for="MaxDocumentUploadSizeMb" class="form-control" />
         <span asp-validation-for="MaxDocumentUploadSizeMb" class="text-danger"></span>
         <div class="form-text">
             Maximum size for uploaded documents (in megabytes). Leave blank to use the default (10 MB).
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CustomLogoUrl" class="form-label"></label>
+        <input asp-for="CustomLogoUrl" class="form-control" />
+        <span asp-validation-for="CustomLogoUrl" class="text-danger"></span>
+        <div class="form-text">
+            URL to a custom logo to display in the UI.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="WebHookUrl" class="form-label"></label>
+        <input asp-for="WebHookUrl" class="form-control" />
+        <span asp-validation-for="WebHookUrl" class="text-danger"></span>
+        <div class="form-text">
+            Optional webhook target for events/notifications.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AllowedFileExtensions" class="form-label"></label>
+        <input asp-for="AllowedFileExtensions" class="form-control" />
+        <span asp-validation-for="AllowedFileExtensions" class="text-danger"></span>
+        <div class="form-text">
+            Comma-separated list (e.g., .jpg, .png, .pdf).
+        </div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="InvariantApiEnabled" class="form-check-input" />
+        <label asp-for="InvariantApiEnabled" class="form-check-label"></label>
+        <span asp-validation-for="InvariantApiEnabled" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="CustomWidgetsEnabled" class="form-check-input" />
+        <label asp-for="CustomWidgetsEnabled" class="form-check-label"></label>
+        <span asp-validation-for="CustomWidgetsEnabled" class="text-danger"></span>
+    </div>
+
+    <h4 class="mt-4">Mail (SMTP)</h4>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label asp-for="MailHost" class="form-label"></label>
+            <input asp-for="MailHost" class="form-control" />
+            <span asp-validation-for="MailHost" class="text-danger"></span>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="MailPort" class="form-label"></label>
+            <input asp-for="MailPort" class="form-control" />
+            <span asp-validation-for="MailPort" class="text-danger"></span>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <div class="form-check">
+                <input asp-for="MailUseSsl" class="form-check-input" />
+                <label asp-for="MailUseSsl" class="form-check-label"></label>
+            </div>
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label asp-for="MailUserName" class="form-label"></label>
+            <input asp-for="MailUserName" class="form-control" />
+            <span asp-validation-for="MailUserName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="MailPassword" class="form-label"></label>
+            <input asp-for="MailPassword" class="form-control" />
+            <span asp-validation-for="MailPassword" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label asp-for="MailFromEmail" class="form-label"></label>
+            <input asp-for="MailFromEmail" class="form-control" />
+            <span asp-validation-for="MailFromEmail" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="MailFromName" class="form-label"></label>
+            <input asp-for="MailFromName" class="form-control" />
+            <span asp-validation-for="MailFromName" class="text-danger"></span>
         </div>
     </div>
 
@@ -81,6 +205,25 @@
         <span asp-validation-for="ReminderEmailDaysAhead" class="text-danger"></span>
         <div class="form-text">
             Number of days ahead to include in reminder email digests. Leave blank to use the default (7 days).
+        </div>
+    </div>
+
+    <h4 class="mt-4">Reminder urgency</h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="UrgencyDaysUntilUrgent" class="form-label"></label>
+            <input asp-for="UrgencyDaysUntilUrgent" class="form-control" />
+            <span asp-validation-for="UrgencyDaysUntilUrgent" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="UrgencyDaysUntilVeryUrgent" class="form-label"></label>
+            <input asp-for="UrgencyDaysUntilVeryUrgent" class="form-control" />
+            <span asp-validation-for="UrgencyDaysUntilVeryUrgent" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="UrgencyDaysUntilPastDue" class="form-label"></label>
+            <input asp-for="UrgencyDaysUntilPastDue" class="form-control" />
+            <span asp-validation-for="UrgencyDaysUntilPastDue" class="text-danger"></span>
         </div>
     </div>
 

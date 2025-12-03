@@ -1,9 +1,9 @@
-@model IEnumerable<Automax.Models.Reminder.ReminderEmailDigest>
+@model Automax.Models.Reminder.ReminderEmailViewModel
 
 @{
     ViewData["Title"] = "Reminder Email Digests";
-    var enabled = ViewBag.EnableReminderEmails as bool? ?? false;
-    var daysAhead = ViewBag.ReminderEmailDaysAhead as int?;
+    var enabled = Model.EnableReminderEmails;
+    var daysAhead = Model.ReminderEmailDaysAhead;
 }
 
 <h1>Reminder Email Digests</h1>
@@ -42,7 +42,7 @@
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary ms-2">Back to Dashboard</a>
 </form>
 
-@if (Model == null || !Model.Any())
+@if (Model.Digests == null || !Model.Digests.Any())
 {
     <p class="text-muted">
         No reminder email digests would be sent at this time.
@@ -54,7 +54,7 @@ else
         Preview of reminder email digests that would be sent:
     </p>
 
-    @foreach (var digest in Model)
+    @foreach (var digest in Model.Digests)
     {
         <div class="card mb-3">
             <div class="card-header">

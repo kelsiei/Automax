@@ -55,10 +55,10 @@ public class ReminderEmailControllerTests
         var result = await controller.Index();
 
         var view = Assert.IsType<ViewResult>(result);
-        var model = Assert.IsAssignableFrom<IEnumerable<ReminderEmailDigest>>(view.Model);
-        Assert.Equal(digests, model);
-        Assert.False((bool)(view.ViewData["EnableReminderEmails"] ?? true));
-        Assert.Null(view.ViewData["ReminderEmailDaysAhead"]);
+        var model = Assert.IsType<ReminderEmailViewModel>(view.Model);
+        Assert.Equal(digests, model.Digests);
+        Assert.False(model.EnableReminderEmails);
+        Assert.Null(model.ReminderEmailDaysAhead);
     }
 
     [Fact]
@@ -78,8 +78,9 @@ public class ReminderEmailControllerTests
         var result = await controller.Index();
 
         var view = Assert.IsType<ViewResult>(result);
-        Assert.True((bool)(view.ViewData["EnableReminderEmails"] ?? false));
-        Assert.Equal(10, view.ViewData["ReminderEmailDaysAhead"]);
+        var model = Assert.IsType<ReminderEmailViewModel>(view.Model);
+        Assert.True(model.EnableReminderEmails);
+        Assert.Equal(10, model.ReminderEmailDaysAhead);
     }
 
     [Fact]

@@ -115,7 +115,8 @@ public class VehicleController : Controller
             return RedirectToAction("Index", "Login");
         }
 
-        await _vehicleDataAccess.SaveVehicleAsync(vehicleModel);
+        var newId = await _vehicleDataAccess.SaveVehicleAsync(vehicleModel);
+        vehicleModel.Id = newId;
 
         if (!isRootUser)
         {
