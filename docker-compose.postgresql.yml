@@ -5,14 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: carcaretracker:pg
+    image: automax:pg
     depends_on:
       - postgres
     ports:
       - "8080:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
-      POSTGRES_CONNECTION: ${POSTGRES_CONNECTION:-Host=postgres;Port=5432;Database=carcaretracker;User Id=carcare;Password=secret;}
+      POSTGRES_CONNECTION: ${POSTGRES_CONNECTION:-Host=postgres;Port=5432;Database=automax;User Id=automax;Password=secret;}
     volumes:
       - ./data:/app/data
     env_file:
@@ -22,9 +22,9 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: carcare
+      POSTGRES_USER: automax
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: carcaretracker
+      POSTGRES_DB: automax
     ports:
       - "5432:5432"
     volumes:

@@ -1,13 +1,13 @@
 using System.Security.Claims;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.Settings;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Logic;
+using Automax.Models.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class DocumentController : Controller

@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Text;
-using CarCareTracker.Models.Report;
-using CarCareTracker.Models.Vehicle;
+using Automax.Models.Report;
+using Automax.Models.Vehicle;
 
-namespace CarCareTracker.Logic;
+namespace Automax.Logic;
 
 public class ReportLogic
 {
@@ -14,9 +14,13 @@ public class ReportLogic
         _vehicleLogic = vehicleLogic;
     }
 
-    public async Task<IList<VehicleReportSummary>> GetVehicleReportSummariesAsync(int userId, bool isRootUser, string? searchTerm = null)
+    public virtual async Task<IList<VehicleReportSummary>> GetVehicleReportSummariesAsync(
+        int userId,
+        bool isRootUser,
+        string? searchTerm = null,
+        IEnumerable<int>? allowedVehicleIds = null)
     {
-        var dashboardVehicles = await _vehicleLogic.GetVehicleDashboardAsync(userId, isRootUser, null, searchTerm);
+        var dashboardVehicles = await _vehicleLogic.GetVehicleDashboardAsync(userId, isRootUser, allowedVehicleIds, searchTerm);
 
         var summaries = dashboardVehicles
             .Select(MapToSummary)
@@ -25,9 +29,9 @@ public class ReportLogic
         return summaries;
     }
 
-    public async Task<string> GetVehicleReportCsvAsync(int userId, bool isRootUser)
+    public virtual async Task<string> GetVehicleReportCsvAsync(int userId, bool isRootUser, IEnumerable<int>? allowedVehicleIds = null)
     {
-        var summaries = await GetVehicleReportSummariesAsync(userId, isRootUser);
+        var summaries = await GetVehicleReportSummariesAsync(userId, isRootUser, null, allowedVehicleIds);
 
         var sb = new StringBuilder();
 

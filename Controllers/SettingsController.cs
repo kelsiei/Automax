@@ -1,10 +1,10 @@
 using System.Security.Claims;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Settings;
+using Automax.Helper;
+using Automax.Models.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class SettingsController : Controller
@@ -86,7 +86,7 @@ public class SettingsController : Controller
 
         _logger.LogInformation("Server settings updated by root user {UserId}.", userId);
 
-        TempData["StatusMessage"] = "Server settings have been updated.";
+        TempData["StatusMessage"] = "Server settings have been saved successfully.";
         return RedirectToAction(nameof(Index));
     }
 

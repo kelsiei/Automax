@@ -1,8 +1,8 @@
-@model CarCareTracker.Models.PlanRecord.PlanRecord
+@model Automax.Models.PlanRecord.PlanRecord
 
 @{
     ViewData["Title"] = "Add Plan";
-    var vehicle = ViewBag.Vehicle as CarCareTracker.Models.Vehicle.Vehicle;
+    var vehicle = ViewBag.Vehicle as Automax.Models.Vehicle.Vehicle;
 }
 
 <h1>Add Plan</h1>
@@ -39,7 +39,7 @@
                 <label asp-for="Priority" class="form-label"></label>
                 <select asp-for="Priority"
                         class="form-select"
-                        asp-items="Html.GetEnumSelectList<CarCareTracker.Enum.PlanPriority>()">
+                        asp-items="Html.GetEnumSelectList<Automax.Enum.PlanPriority>()">
                 </select>
                 <span asp-validation-for="Priority" class="text-danger"></span>
             </div>
@@ -48,7 +48,7 @@
                 <label asp-for="Progress" class="form-label"></label>
                 <select asp-for="Progress"
                         class="form-select"
-                        asp-items="Html.GetEnumSelectList<CarCareTracker.Enum.PlanProgress>()">
+                        asp-items="Html.GetEnumSelectList<Automax.Enum.PlanProgress>()">
                 </select>
                 <span asp-validation-for="Progress" class="text-danger"></span>
             </div>

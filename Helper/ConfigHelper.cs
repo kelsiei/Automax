@@ -1,8 +1,8 @@
 using System.Text.Json;
-using CarCareTracker.Models.Settings;
+using Automax.Models.Settings;
 using Microsoft.Extensions.Logging;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public class ConfigHelper
 {
@@ -23,7 +23,7 @@ public class ConfigHelper
         };
     }
 
-    public ServerConfig LoadServerConfig()
+    public virtual ServerConfig LoadServerConfig()
     {
         StaticHelper.EnsureDataDirectoriesExist(_logger);
         try
@@ -52,7 +52,7 @@ public class ConfigHelper
         }
     }
 
-    public void SaveServerConfig(ServerConfig config)
+    public virtual void SaveServerConfig(ServerConfig config)
     {
         StaticHelper.EnsureDataDirectoriesExist(_logger);
         try
@@ -67,7 +67,7 @@ public class ConfigHelper
         }
     }
 
-    public UserConfig LoadUserConfig()
+    public virtual UserConfig LoadUserConfig()
     {
         StaticHelper.EnsureDataDirectoriesExist(_logger);
         try
@@ -96,7 +96,7 @@ public class ConfigHelper
         }
     }
 
-    public void SaveUserConfig(UserConfig config)
+    public virtual void SaveUserConfig(UserConfig config)
     {
         StaticHelper.EnsureDataDirectoriesExist(_logger);
         try
@@ -128,7 +128,7 @@ public class ConfigHelper
             InvariantApiEnabled = false,
             CustomWidgetsEnabled = false,
             ReminderUrgencyConfig = new ReminderUrgencyConfig(),
-            Motd = "Welcome to CarCareTracker",
+            Motd = "Welcome to Automax",
             MailConfig = new MailConfig(),
             Domain = string.Empty,
             OidcConfig = null

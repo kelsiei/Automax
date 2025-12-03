@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using CarCareTracker.Models.Shared;
+using Automax.Models.Shared;
 
-namespace CarCareTracker.Models.GasRecord;
+namespace Automax.Models.GasRecord;
 
 public class GasRecord
 {

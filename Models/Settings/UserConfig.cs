@@ -1,6 +1,6 @@
-using CarCareTracker.Enum;
+using Automax.Enum;
 
-namespace CarCareTracker.Models.Settings;
+namespace Automax.Models.Settings;
 
 public class UserConfig
 {
@@ -13,5 +13,8 @@ public class UserConfig
     public ReminderUrgencyConfig? ReminderUrgencyConfig { get; set; }
     public List<UserColumnPreference> ColumnPreferences { get; set; } = new();
     public List<DashboardMetric> DashboardMetrics { get; set; } = new();
+    public string? DefaultLandingPage { get; set; }
+    public bool ShowFuelWidget { get; set; } = true;
+    public string? PreferredUnits { get; set; }
     // TODO: add tab-specific preferences and allowed tabs per spec.
 }

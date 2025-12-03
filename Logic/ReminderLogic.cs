@@ -1,8 +1,8 @@
-using CarCareTracker.Enum;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Models.Reminder;
+using Automax.Enum;
+using Automax.External.Interfaces;
+using Automax.Models.Reminder;
 
-namespace CarCareTracker.Logic;
+namespace Automax.Logic;
 
 public class ReminderLogic
 {
@@ -20,22 +20,11 @@ public class ReminderLogic
         _reminderRecordDataAccess = reminderRecordDataAccess;
     }
 
-    public async Task<IList<ReminderCalendarItem>> GetDateBasedRemindersForUserAsync(int userId, bool isRootUser)
+    public virtual async Task<IList<ReminderCalendarItem>> GetDateBasedRemindersForUserAsync(int userId, bool isRootUser)
     {
         var accessibleVehicleIds = await _userLogic.GetAccessibleVehicleIdsForUserAsync(userId, isRootUser);
 
-        List<Models.Vehicle.Vehicle> vehicles;
-
-        if (isRootUser && accessibleVehicleIds.Count == 0)
-        {
-            vehicles = await _vehicleDataAccess.GetVehiclesAsync(userId);
-        }
-        else
-        {
-            var allVehicles = await _vehicleDataAccess.GetVehiclesAsync(userId);
-            var allowedSet = new HashSet<int>(accessibleVehicleIds);
-            vehicles = allVehicles.Where(v => allowedSet.Contains(v.Id)).ToList();
-        }
+        var vehicles = await _vehicleDataAccess.GetVehiclesAsync(userId, isRootUser, accessibleVehicleIds);
 
         var results = new List<ReminderCalendarItem>();
 

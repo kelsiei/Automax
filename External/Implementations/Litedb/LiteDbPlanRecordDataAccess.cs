@@ -1,10 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.PlanRecord;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.API;
+using Automax.Models.PlanRecord;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbPlanRecordDataAccess : IPlanRecordDataAccess
 {
@@ -18,7 +18,7 @@ public class LiteDbPlanRecordDataAccess : IPlanRecordDataAccess
     public Task<PlanRecord?> GetPlanRecordAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<PlanRecord?>(result);
     }
 
     public Task<List<PlanRecord>> GetPlanRecordsForVehicleAsync(int vehicleId, MethodParameter? filter = null)

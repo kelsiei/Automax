@@ -1,13 +1,13 @@
 using System.Security.Claims;
-using CarCareTracker.Enum;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.PlanRecord;
-using CarCareTracker.Models.Vehicle;
+using Automax.Enum;
+using Automax.External.Interfaces;
+using Automax.Logic;
+using Automax.Models.PlanRecord;
+using Automax.Models.Vehicle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class PlanController : Controller

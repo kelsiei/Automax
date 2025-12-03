@@ -1,10 +1,10 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.Reminder;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.API;
+using Automax.Models.Reminder;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbReminderRecordDataAccess : IReminderRecordDataAccess
 {
@@ -18,7 +18,7 @@ public class LiteDbReminderRecordDataAccess : IReminderRecordDataAccess
     public Task<ReminderRecord?> GetReminderRecordAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<ReminderRecord?>(result);
     }
 
     public Task<List<ReminderRecord>> GetReminderRecordsForVehicleAsync(int vehicleId, MethodParameter? filter = null)

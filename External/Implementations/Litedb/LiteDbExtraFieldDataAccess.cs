@@ -1,9 +1,9 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Shared;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.Shared;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbExtraFieldDataAccess : IExtraFieldDataAccess
 {

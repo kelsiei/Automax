@@ -1,12 +1,12 @@
 using System.Security.Claims;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.Note;
-using CarCareTracker.Models.Vehicle;
+using Automax.External.Interfaces;
+using Automax.Logic;
+using Automax.Models.Note;
+using Automax.Models.Vehicle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class NoteController : Controller

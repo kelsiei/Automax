@@ -1,11 +1,12 @@
 using System.Security.Claims;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Logic;
-using CarCareTracker.Models.Vehicle;
+using Automax.External.Interfaces;
+using Automax.Logic;
+using Automax.Models.Vehicle;
+using Automax.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class VehicleController : Controller
@@ -14,17 +15,20 @@ public class VehicleController : Controller
     private readonly IVehicleDataAccess _vehicleDataAccess;
     private readonly VehicleLogic _vehicleLogic;
     private readonly UserLogic _userLogic;
+    private readonly IUserAccessDataAccess _userAccessDataAccess;
 
     public VehicleController(
         ILogger<VehicleController> logger,
         IVehicleDataAccess vehicleDataAccess,
         VehicleLogic vehicleLogic,
-        UserLogic userLogic)
+        UserLogic userLogic,
+        IUserAccessDataAccess userAccessDataAccess)
     {
         _logger = logger;
         _vehicleDataAccess = vehicleDataAccess;
         _vehicleLogic = vehicleLogic;
         _userLogic = userLogic;
+        _userAccessDataAccess = userAccessDataAccess;
     }
 
     // GET: /Vehicle
@@ -37,8 +41,17 @@ public class VehicleController : Controller
             return RedirectToAction("Index", "Login");
         }
 
-        // For now, VehicleLogic handles building dashboard-style view models.
-        var models = await _vehicleLogic.GetVehicleDashboardAsync(userId.Value, isRootUser, null, searchTerm);
+        List<int>? allowedIds = null;
+        if (!isRootUser)
+        {
+            allowedIds = await _userLogic.GetAccessibleVehicleIdsForUserAsync(userId.Value, isRootUser);
+        }
+
+        var models = await _vehicleLogic.GetVehicleDashboardAsync(
+            userId.Value,
+            isRootUser,
+            isRootUser ? null : allowedIds,
+            searchTerm);
 
         if (showOnlyUrgent)
         {
@@ -89,17 +102,33 @@ public class VehicleController : Controller
     // POST: /Vehicle/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Vehicle model)
+    public async Task<IActionResult> Create(Vehicle vehicleModel)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(vehicleModel);
         }
 
-        await _vehicleDataAccess.SaveVehicleAsync(model);
+        var (userId, isRootUser) = GetCurrentUserContext();
+        if (userId == null)
+        {
+            return RedirectToAction("Index", "Login");
+        }
 
-        // In a later phase, associate this vehicle with the current user via UserAccess.
-        _logger.LogInformation("Vehicle {Year} {Make} {Model} created.", model.Year, model.Make, model.Model);
+        await _vehicleDataAccess.SaveVehicleAsync(vehicleModel);
+
+        if (!isRootUser)
+        {
+            var access = new UserAccess
+            {
+                UserId = userId.Value,
+                VehicleId = vehicleModel.Id,
+                CanEdit = true
+            };
+            await _userAccessDataAccess.SaveUserAccessAsync(access);
+        }
+
+        _logger.LogInformation("Vehicle {Year} {Make} {Model} created.", vehicleModel.Year, vehicleModel.Make, vehicleModel.Model);
 
         return RedirectToAction(nameof(Index));
     }
@@ -131,16 +160,16 @@ public class VehicleController : Controller
     // POST: /Vehicle/Edit/{id}
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Vehicle model)
+    public async Task<IActionResult> Edit(int id, Vehicle vehicleModel)
     {
-        if (id != model.Id)
+        if (id != vehicleModel.Id)
         {
             return BadRequest();
         }
 
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(vehicleModel);
         }
 
         var (userId, isRootUser) = GetCurrentUserContext();
@@ -154,8 +183,8 @@ public class VehicleController : Controller
             return Forbid();
         }
 
-        await _vehicleDataAccess.SaveVehicleAsync(model);
-        _logger.LogInformation("Vehicle {VehicleId} updated.", model.Id);
+        await _vehicleDataAccess.SaveVehicleAsync(vehicleModel);
+        _logger.LogInformation("Vehicle {VehicleId} updated.", vehicleModel.Id);
 
         return RedirectToAction(nameof(Index));
     }

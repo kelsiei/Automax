@@ -1,7 +1,7 @@
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.ServiceRecord;
+using Automax.Models.API;
+using Automax.Models.ServiceRecord;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IServiceRecordDataAccess
 {

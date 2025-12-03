@@ -1,7 +1,7 @@
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.OdometerRecord;
+using Automax.Models.API;
+using Automax.Models.OdometerRecord;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IOdometerRecordDataAccess
 {

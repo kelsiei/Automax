@@ -1,4 +1,4 @@
-@model CarCareTracker.Models.Home.HomeDashboardViewModel
+@model Automax.Models.Home.HomeDashboardViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -44,78 +44,142 @@ else
 }
 
 <div class="row mb-4">
-    <div class="col-md-4 mb-3">
-        <div class="card dashboard-metric-card">
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-metric-card shadow-sm">
             <div class="card-body">
                 <h6 class="card-title text-muted">Vehicles</h6>
                 <p class="display-6 mb-0">@Model.VehicleCount</p>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
-        <div class="card dashboard-metric-card">
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-metric-card shadow-sm">
             <div class="card-body">
-                <h6 class="card-title text-muted">Vehicles with Urgent Reminders</h6>
+                <h6 class="card-title text-muted">Urgent Vehicles</h6>
                 <p class="display-6 mb-0">@Model.VehiclesWithUrgentReminders</p>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
-        <div class="card dashboard-metric-card">
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-metric-card shadow-sm">
             <div class="card-body">
                 <h6 class="card-title text-muted">Open Reminders</h6>
                 <p class="display-6 mb-0">@Model.OpenRemindersCount</p>
             </div>
         </div>
     </div>
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-metric-card shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Upcoming (30d)</h6>
+                <p class="display-6 mb-0">@Model.UpcomingReminders.Count</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-@if (Model.UpcomingReminders != null && Model.UpcomingReminders.Any())
-{
-    <h2>Upcoming Reminders (next 30 days)</h2>
-
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th class="text-end">Due Date</th>
-                    <th>Vehicle</th>
-                    <th>Description</th>
-                    <th>Urgency</th>
-                    <th>Tags</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var r in Model.UpcomingReminders)
-            {
-                <tr>
-                    <td class="text-end">@(r.DueDate.HasValue ? r.DueDate.Value.ToShortDateString() : "")</td>
-                    <td>@r.Year @r.Make @r.Model (@r.LicensePlate)</td>
-                    <td>@r.Description</td>
-                    <td>@r.Urgency</td>
-                    <td>@r.Tags</td>
-                    <td>
-                        @if (r.IsCompleted)
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Upcoming Reminders (30 days)</span>
+                <a asp-controller="Reminder" asp-action="Index" class="btn btn-sm btn-outline-primary">Reminders</a>
+            </div>
+            <div class="card-body">
+                @if (Model.UpcomingReminders != null && Model.UpcomingReminders.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var r in Model.UpcomingReminders.Take(8))
                         {
-                            <span class="badge bg-success">Completed</span>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <strong>@(r.DueDate?.ToShortDateString() ?? "")</strong>
+                                    <span class="badge @(r.IsCompleted ? "bg-success" : "bg-secondary")">
+                                        @(r.IsCompleted ? "Completed" : "Open")
+                                    </span>
+                                </div>
+                                <div class="small text-muted">@r.Year @r.Make @r.Model (@r.LicensePlate)</div>
+                                <div>@r.Description</div>
+                                <div class="small">Urgency: @r.Urgency @if (!string.IsNullOrWhiteSpace(r.Tags)) { <span class="text-muted">| @r.Tags</span> }</div>
+                            </div>
                         }
-                        else
-                        {
-                            <span class="badge bg-secondary">Open</span>
-                        }
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No upcoming date-based reminders in the next 30 days.</p>
+                }
+            </div>
+        </div>
     </div>
-}
-else
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Recent Services</span>
+                <a asp-controller="Service" asp-action="Index" class="btn btn-sm btn-outline-primary">Services</a>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentServices != null && Model.RecentServices.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var s in Model.RecentServices.Take(8))
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>@s.Date.ToShortDateString()</strong>
+                                    <div class="small text-muted">Vehicle #@s.VehicleId</div>
+                                    <div>@s.Description</div>
+                                </div>
+                                @if (s.Cost.HasValue)
+                                {
+                                    <span class="badge bg-light text-dark">Cost: @s.Cost.Value.ToString("C")</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No service records yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.ShowFuelWidget)
 {
-    <p class="text-muted">
-        No upcoming date-based reminders in the next 30 days.
-    </p>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Fuel Summary @if (!string.IsNullOrWhiteSpace(Model.PreferredUnits)) { <span class="text-muted">(@Model.PreferredUnits)</span> }</span>
+                    <a asp-controller="Gas" asp-action="Index" class="btn btn-sm btn-outline-primary">Fuel Logs</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.FuelSummaries != null && Model.FuelSummaries.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var f in Model.FuelSummaries.Take(8))
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="small text-muted">Vehicle #@f.VehicleId</div>
+                                        <div>Avg Efficiency: @f.AverageEfficiency.ToString("0.##")</div>
+                                    </div>
+                                    <span class="badge bg-light text-dark">Fuel Cost: @f.TotalFuelCost.ToString("C")</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No fuel records available.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 <p class="mt-3">

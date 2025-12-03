@@ -1,4 +1,4 @@
-namespace CarCareTracker.Models.Report;
+namespace Automax.Models.Report;
 
 public class ReportIndexViewModel
 {

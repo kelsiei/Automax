@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using CarCareTracker.Enum;
-using CarCareTracker.Models.Shared;
+using Automax.Enum;
+using Automax.Models.Shared;
 
-namespace CarCareTracker.Models.Reminder;
+namespace Automax.Models.Reminder;
 
 public class ReminderRecord : IValidatableObject
 {

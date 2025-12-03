@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace CarCareTracker.Middleware;
+namespace Automax.Middleware;
 
 public class SecurityHeadersMiddleware
 {

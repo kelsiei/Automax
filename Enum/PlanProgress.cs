@@ -1,4 +1,4 @@
-namespace CarCareTracker.Enum;
+namespace Automax.Enum;
 
 public enum PlanProgress
 {

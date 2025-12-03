@@ -1,14 +1,14 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.GasRecord;
-using CarCareTracker.Models.OdometerRecord;
-using CarCareTracker.Models.PlanRecord;
-using CarCareTracker.Models.Note;
-using CarCareTracker.Models.Reminder;
-using CarCareTracker.Models.ServiceRecord;
-using CarCareTracker.Models.Vehicle;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.GasRecord;
+using Automax.Models.OdometerRecord;
+using Automax.Models.PlanRecord;
+using Automax.Models.Note;
+using Automax.Models.Reminder;
+using Automax.Models.ServiceRecord;
+using Automax.Models.Vehicle;
 
-namespace CarCareTracker.Logic;
+namespace Automax.Logic;
 
 public class VehicleLogic
 {
@@ -42,16 +42,19 @@ public class VehicleLogic
     }
 
     /// <summary>
-    /// Builds a list of VehicleViewModel instances for the given user.
-    /// For now, this method does not enforce per-user access restrictions; that will be handled using UserLogic in later phases.
+    /// Builds a list of VehicleViewModel instances for the given user, respecting allowed vehicle access.
     /// </summary>
-    public async Task<List<VehicleViewModel>> GetVehicleDashboardAsync(int userId, bool isRootUser, IEnumerable<int>? allowedVehicleIds = null, string? searchTerm = null)
+    public virtual async Task<List<VehicleViewModel>> GetVehicleDashboardAsync(int userId, bool isRootUser, IEnumerable<int>? allowedVehicleIds = null, string? searchTerm = null)
     {
-        // For now, IVehicleDataAccess.GetVehiclesAsync ignores userId and returns all vehicles.
-        var vehicles = await _vehicleDataAccess.GetVehiclesAsync(userId);
+        var vehicles = await _vehicleDataAccess.GetVehiclesAsync(userId, isRootUser, allowedVehicleIds);
 
-        if (!isRootUser && allowedVehicleIds is not null)
+        if (!isRootUser)
         {
+            if (allowedVehicleIds == null)
+            {
+                return new List<VehicleViewModel>();
+            }
+
             var allowedSet = new HashSet<int>(allowedVehicleIds);
             vehicles = vehicles.Where(v => allowedSet.Contains(v.Id)).ToList();
         }

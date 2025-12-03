@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using CarCareTracker.Enum;
-using CarCareTracker.Models.Shared;
+using Automax.Enum;
+using Automax.Models.Shared;
 
-namespace CarCareTracker.Models.PlanRecord;
+namespace Automax.Models.PlanRecord;
 
 public class PlanRecord
 {

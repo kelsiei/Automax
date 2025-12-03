@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarCareTracker.Models.Settings;
+namespace Automax.Models.Settings;
 
 public class ServerSettingsViewModel
 {

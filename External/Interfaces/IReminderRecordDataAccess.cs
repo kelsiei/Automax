@@ -1,7 +1,7 @@
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.Reminder;
+using Automax.Models.API;
+using Automax.Models.Reminder;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IReminderRecordDataAccess
 {

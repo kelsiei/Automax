@@ -1,7 +1,7 @@
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.Note;
+using Automax.Models.API;
+using Automax.Models.Note;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface INoteDataAccess
 {

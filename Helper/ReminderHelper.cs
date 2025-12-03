@@ -1,7 +1,7 @@
 using System.Text;
-using CarCareTracker.Models.Reminder;
+using Automax.Models.Reminder;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public class ReminderHelper
 {
@@ -10,7 +10,7 @@ public class ReminderHelper
         var sb = new StringBuilder();
 
         sb.AppendLine("BEGIN:VCALENDAR");
-        sb.AppendLine("PRODID:-//CarCareTracker//EN");
+        sb.AppendLine("PRODID:-//Automax//EN");
         sb.AppendLine("VERSION:2.0");
         sb.AppendLine($"NAME:{EscapeText(calendarName)}");
         sb.AppendLine($"X-WR-CALNAME:{EscapeText(calendarName)}");
@@ -25,7 +25,7 @@ public class ReminderHelper
             var date = r.DueDate.Value.Date;
             var dt = date.ToString("yyyyMMdd");
 
-            var uid = $"carcare-{r.ReminderId}@carcaretracker";
+            var uid = $"automax-{r.ReminderId}@Automax";
             var summary = $"{r.Year} {r.Make} {r.Model} ({r.LicensePlate}): {r.Description}";
             var descriptionBuilder = new StringBuilder();
             descriptionBuilder.Append(r.Description ?? string.Empty);

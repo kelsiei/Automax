@@ -1,6 +1,6 @@
-using CarCareTracker.Models.Shared;
+using Automax.Models.Shared;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IExtraFieldDataAccess
 {

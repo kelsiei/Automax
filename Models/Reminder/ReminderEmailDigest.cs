@@ -1,4 +1,4 @@
-namespace CarCareTracker.Models.Reminder;
+namespace Automax.Models.Reminder;
 
 public class ReminderEmailDigest
 {

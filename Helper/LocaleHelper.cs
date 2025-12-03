@@ -1,8 +1,8 @@
 using System.Globalization;
-using CarCareTracker.Models.Settings;
+using Automax.Models.Settings;
 using Microsoft.AspNetCore.Localization;
 
-namespace CarCareTracker.Helper;
+namespace Automax.Helper;
 
 public class LocaleHelper
 {

@@ -1,8 +1,8 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Reminder;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.Reminder;
 
-namespace CarCareTracker.Logic;
+namespace Automax.Logic;
 
 public class ReminderEmailLogic
 {
@@ -20,7 +20,7 @@ public class ReminderEmailLogic
         _userRecordDataAccess = userRecordDataAccess;
     }
 
-    public async Task<IList<ReminderEmailDigest>> BuildReminderEmailDigestsAsync()
+    public virtual async Task<IList<ReminderEmailDigest>> BuildReminderEmailDigestsAsync()
     {
         var serverConfig = _configHelper.LoadServerConfig();
         if (!serverConfig.EnableReminderEmails)

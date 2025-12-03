@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarCareTracker.Models.OdometerRecord;
+namespace Automax.Models.OdometerRecord;
 
 public class OdometerRecord
 {

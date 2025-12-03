@@ -1,12 +1,12 @@
 using System.Security.Claims;
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.Admin;
-using CarCareTracker.Models.User;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.Admin;
+using Automax.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarCareTracker.Controllers;
+namespace Automax.Controllers;
 
 [Authorize]
 public class AdminController : Controller

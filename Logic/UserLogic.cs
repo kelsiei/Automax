@@ -1,6 +1,6 @@
-using CarCareTracker.External.Interfaces;
+using Automax.External.Interfaces;
 
-namespace CarCareTracker.Logic;
+namespace Automax.Logic;
 
 public class UserLogic
 {
@@ -15,7 +15,7 @@ public class UserLogic
     /// Returns a list of vehicle IDs the given user can access.
     /// For root users, an empty list is returned, which callers may interpret as "all vehicles".
     /// </summary>
-    public async Task<List<int>> GetAccessibleVehicleIdsForUserAsync(int userId, bool isRootUser)
+    public virtual async Task<List<int>> GetAccessibleVehicleIdsForUserAsync(int userId, bool isRootUser)
     {
         if (isRootUser)
         {

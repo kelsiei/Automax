@@ -1,7 +1,7 @@
-using CarCareTracker.Models.Settings;
-using CarCareTracker.Models.User;
+using Automax.Models.Settings;
+using Automax.Models.User;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IUserConfigDataAccess
 {

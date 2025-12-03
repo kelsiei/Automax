@@ -1,9 +1,9 @@
 // site.js
-// TODO: Add shared client-side behavior for CarCareTracker pages.
-console.log("CarCareTracker site.js loaded");
+// TODO: Add shared client-side behavior for Automax pages.
+console.log("Automax site.js loaded");
 
 (function () {
-    var THEME_KEY = 'carcare-theme';
+    var THEME_KEY = 'automax-theme';
 
     function applyTheme(theme) {
         var isDark = theme === 'dark';

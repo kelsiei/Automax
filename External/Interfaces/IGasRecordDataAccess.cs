@@ -1,7 +1,7 @@
-using CarCareTracker.Models.API;
-using CarCareTracker.Models.GasRecord;
+using Automax.Models.API;
+using Automax.Models.GasRecord;
 
-namespace CarCareTracker.External.Interfaces;
+namespace Automax.External.Interfaces;
 
 public interface IGasRecordDataAccess
 {

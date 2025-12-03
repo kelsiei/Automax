@@ -1,8 +1,8 @@
-@model CarCareTracker.Models.Reminder.ReminderRecord
+@model Automax.Models.Reminder.ReminderRecord
 
 @{
     ViewData["Title"] = "Edit Reminder";
-    var vehicle = ViewBag.Vehicle as CarCareTracker.Models.Vehicle.Vehicle;
+    var vehicle = ViewBag.Vehicle as Automax.Models.Vehicle.Vehicle;
 }
 
 <h1>Edit Reminder</h1>
@@ -33,7 +33,7 @@
             <div class="mb-3">
                 <label asp-for="Metric" class="form-label"></label>
                 <select asp-for="Metric" class="form-select"
-                        asp-items="Html.GetEnumSelectList<CarCareTracker.Enum.ReminderMetric>()">
+                        asp-items="Html.GetEnumSelectList<Automax.Enum.ReminderMetric>()">
                 </select>
                 <span asp-validation-for="Metric" class="text-danger"></span>
             </div>

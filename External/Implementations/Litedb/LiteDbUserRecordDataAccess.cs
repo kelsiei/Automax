@@ -1,9 +1,9 @@
-using CarCareTracker.External.Interfaces;
-using CarCareTracker.Helper;
-using CarCareTracker.Models.User;
+using Automax.External.Interfaces;
+using Automax.Helper;
+using Automax.Models.User;
 using LiteDB;
 
-namespace CarCareTracker.External.Implementations.Litedb;
+namespace Automax.External.Implementations.Litedb;
 
 public class LiteDbUserRecordDataAccess : IUserRecordDataAccess
 {
@@ -17,13 +17,13 @@ public class LiteDbUserRecordDataAccess : IUserRecordDataAccess
     public Task<UserData?> GetUserByIdAsync(int id)
     {
         var result = _collection.FindById(id);
-        return Task.FromResult(result);
+        return Task.FromResult<UserData?>(result);
     }
 
     public Task<UserData?> GetUserByUserNameAsync(string userName)
     {
         var result = _collection.FindOne(x => x.UserName == userName);
-        return Task.FromResult(result);
+        return Task.FromResult<UserData?>(result);
     }
 
     public Task<List<UserData>> GetAllUsersAsync()
